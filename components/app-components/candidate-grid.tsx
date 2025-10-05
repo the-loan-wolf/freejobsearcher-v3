@@ -7,7 +7,7 @@ import { Button } from "@/components/app-components/ui/button"
 const candidates = [
   {
     id: 1,
-    name: "Sunny Das",
+    name: "Sandhya singh",
     role: "UI & UX Designer",
     location: "Mumbai, India",
     salary: "₹25,000",
@@ -27,7 +27,7 @@ const candidates = [
   },
   {
     id: 3,
-    name: "Akashdeep Anand",
+    name: "Shristi kumari",
     role: "Full Stack Developer",
     location: "Delhi, India",
     salary: "₹50,000",
@@ -47,7 +47,7 @@ const candidates = [
   },
   {
     id: 5,
-    name: "Rishav Bhardwaj",
+    name: "Kartik sharma",
     role: "Account Manager",
     location: "Pune, India",
     salary: "₹30,000",

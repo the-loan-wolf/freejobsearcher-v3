@@ -12,7 +12,7 @@ export default function UserProfilePage() {
   // Mock user data - in a real app this would come from authentication/database
   const user = {
     id: "user-1",
-    name: "John Doe",
+    name: "Summer smith",
     email: "john.doe@email.com",
     phone: "+1 (555) 123-4567",
     location: "San Francisco, CA",

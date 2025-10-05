@@ -79,7 +79,7 @@ export function Header({ onSearch }: HeaderProps) {
                     <AvatarImage src="/user-avatar.jpg" alt="User" />
                     <AvatarFallback className="bg-primary/20 text-primary">JD</AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline">John Doe</span>
+                  <span className="hidden sm:inline">Summer smith</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 glass-strong border-primary/20">
