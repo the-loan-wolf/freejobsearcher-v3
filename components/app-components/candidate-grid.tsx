@@ -3,135 +3,52 @@
 import { useState, useMemo } from "react"
 import { CandidateCard } from "@/components/app-components/candidate-card"
 import { Button } from "@/components/app-components/ui/button"
-
-const candidates = [
-  {
-    id: 1,
-    name: "Sandhya singh",
-    role: "UI & UX Designer",
-    location: "Mumbai, India",
-    salary: "₹25,000",
-    image: "/ui-designer-headshot.png",
-    skills: ["Figma", "Adobe XD", "Prototyping"],
-    experience: "3+ years",
-  },
-  {
-    id: 2,
-    name: "Vikas Kumar",
-    role: "Software Developer",
-    location: "Bangalore, India",
-    salary: "₹10,000",
-    image: "/software-developer-headshot.png",
-    skills: ["React", "Node.js", "Python"],
-    experience: "2+ years",
-  },
-  {
-    id: 3,
-    name: "Shristi kumari",
-    role: "Full Stack Developer",
-    location: "Delhi, India",
-    salary: "₹50,000",
-    image: "/professional-headshot-of-full-stack-developer.jpg",
-    skills: ["JavaScript", "MongoDB", "Express"],
-    experience: "5+ years",
-  },
-  {
-    id: 4,
-    name: "Ashish Raj",
-    role: "Doctor",
-    location: "Chennai, India",
-    salary: "₹12,000",
-    image: "/doctor-headshot.png",
-    skills: ["General Medicine", "Patient Care"],
-    experience: "4+ years",
-  },
-  {
-    id: 5,
-    name: "Kartik sharma",
-    role: "Account Manager",
-    location: "Pune, India",
-    salary: "₹30,000",
-    image: "/professional-headshot-of-account-manager.jpg",
-    skills: ["Client Relations", "Sales", "CRM"],
-    experience: "3+ years",
-  },
-  {
-    id: 6,
-    name: "Aniket Singh",
-    role: "Account Manager",
-    location: "Hyderabad, India",
-    salary: "₹30,000",
-    image: "/professional-headshot-of-account-manager-male.jpg",
-    skills: ["Business Development", "Analytics"],
-    experience: "2+ years",
-  },
-  {
-    id: 7,
-    name: "Sujata Sharma",
-    role: "Account Manager",
-    location: "Kolkata, India",
-    salary: "₹30,000",
-    image: "/professional-headshot-of-female-account-manager.jpg",
-    skills: ["Project Management", "Communication"],
-    experience: "4+ years",
-  },
-  {
-    id: 8,
-    name: "Simran Kaur",
-    role: "Account Manager",
-    location: "Jaipur, India",
-    salary: "₹30,000",
-    image: "/images/team-member-2.png",
-    skills: ["Strategic Planning", "Team Leadership"],
-    experience: "3+ years",
-  },
-  {
-    id: 9,
-    name: "Purva Mehta",
-    role: "Account Manager",
-    location: "Ahmedabad, India",
-    salary: "₹30,000",
-    image: "/female-project-manager-headshot.png",
-    skills: ["Client Success", "Data Analysis"],
-    experience: "2+ years",
-  },
-  {
-    id: 10,
-    name: "Robin Gupta",
-    role: "Account Manager",
-    location: "Lucknow, India",
-    salary: "₹30,000",
-    image: "/business-executive-headshot.png",
-    skills: ["Relationship Building", "Negotiation"],
-    experience: "5+ years",
-  },
-]
+import { useQuery } from "@tanstack/react-query"
 
 interface CandidateGridProps {
   searchQuery?: string
 }
 
+async function fetchFeed() {
+  const res = await fetch("https://freejob.patna.workers.dev/user/feed");
+  if (!res.ok) throw new Error("Failed to fetch feed");
+  return res.json();
+}
+
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const [visibleCount, setVisibleCount] = useState(6)
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["userFeed"],
+    queryFn: fetchFeed,
+  });
 
   const filteredCandidates = useMemo(() => {
-    if (!searchQuery.trim()) return candidates
+    if (!data) return []; // safely handle undefined
 
-    const query = searchQuery.toLowerCase()
-    return candidates.filter(
+    if (!searchQuery.trim()) return data;
+
+    const query = searchQuery.toLowerCase();
+    return data.filter(
       (candidate) =>
         candidate.name.toLowerCase().includes(query) ||
         candidate.role.toLowerCase().includes(query) ||
         candidate.location.toLowerCase().includes(query) ||
-        candidate.skills.some((skill) => skill.toLowerCase().includes(query)),
-    )
-  }, [searchQuery])
+        candidate.skills.some((skill) => skill.toLowerCase().includes(query))
+    );
+  }, [searchQuery, data]);
 
   const loadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 6, filteredCandidates.length))
-  }
+    setVisibleCount((prev) => Math.min(prev + 6, filteredCandidates.length));
+  };
 
-  const displayedCandidates = filteredCandidates.slice(0, Math.min(visibleCount, filteredCandidates.length))
+  const displayedCandidates = filteredCandidates.slice(
+    0,
+    Math.min(visibleCount, filteredCandidates.length)
+  );
+
+  // Conditional render (not early return)
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="space-y-8">

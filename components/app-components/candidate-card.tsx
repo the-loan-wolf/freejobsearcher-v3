@@ -6,7 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/app-components
 import Link from "next/link";
 
 interface Candidate {
-  id: number;
+  id: string;
   name: string;
   role: string;
   location: string;
