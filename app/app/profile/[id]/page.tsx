@@ -196,28 +196,21 @@ function ProfileContent({ candidateId }: { candidateId: string }) {
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {candidate.contact?.map((item: any, i: number) => {
-                  if (item.phone)
-                    return (
-                      <div
-                        key={`phone-${i}`}
-                        className="flex items-center gap-3"
-                      >
-                        <Phone className="h-5 w-5 text-primary" />
-                        <span>{item.phone}</span>
-                      </div>
-                    );
-                  if (item.email)
-                    return (
-                      <div
-                        key={`email-${i}`}
-                        className="flex items-center gap-3"
-                      >
-                        <Mail className="h-5 w-5 text-primary" />
-                        <span>{item.email}</span>
-                      </div>
-                    );
-                })}
+                {/* Map over the phones array */}
+                {candidate.contact?.phones?.map((phone: any, i: number) => (
+                  <div key={`phone-${i}`} className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-primary" />
+                    <span>{phone}</span>
+                  </div>
+                ))}
+
+                {/* Map over the emails array */}
+                {candidate.contact?.emails?.map((email: any, i: number) => (
+                  <div key={`email-${i}`} className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-primary" />
+                    <span>{email}</span>
+                  </div>
+                ))}
                 <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <span>
