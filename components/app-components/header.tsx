@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import type React from "react"
-import Link from "next/link"
+import type React from "react";
+import Link from "next/link";
 
-import { Search, LogOut, Settings, UserCircle } from "lucide-react"
-import { Button } from "@/components/app-components/ui/button"
-import { Input } from "@/components/app-components/ui/input"
+import { Search, LogOut, Settings, UserCircle } from "lucide-react";
+import { Button } from "@/components/app-components/ui/button";
+import { Input } from "@/components/app-components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,20 +13,39 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/app-components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/app-components/ui/avatar"
+} from "@/components/app-components/ui/dropdown-menu";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/app-components/ui/avatar";
+import { useEffect, useState } from "react";
 
 interface HeaderProps {
-  onSearch?: (query: string) => void
+  onSearch?: (query: string) => void;
 }
 
 export function Header({ onSearch }: HeaderProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch?.(e.target.value)
-  }
+    onSearch?.(e.target.value);
+  };
 
   return (
-    <header className="glass-strong sticky top-0 z-50 shadow-lg shadow-primary/5">
+    <header
+      className={`sticky top-0 z-5 transition-all duration-300 ${
+        isScrolled ? "glass-card" : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
@@ -77,22 +96,33 @@ export function Header({ onSearch }: HeaderProps) {
                 >
                   <Avatar className="h-6 w-6 ring-2 ring-primary/20">
                     <AvatarImage src="/user-avatar.jpg" alt="User" />
-                    <AvatarFallback className="bg-primary/20 text-primary">JD</AvatarFallback>
+                    <AvatarFallback className="bg-primary/20 text-primary">
+                      JD
+                    </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:inline">Summer smith</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 glass-strong border-primary/20">
+              <DropdownMenuContent
+                align="end"
+                className="w-56 glass-strong border-primary/20"
+              >
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/app/account/profile" className="flex items-center">
+                  <Link
+                    href="/app/account/profile"
+                    className="flex items-center"
+                  >
                     <UserCircle className="mr-2 h-4 w-4" />
                     <span>View Profile</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/app/account/settings" className="flex items-center">
+                  <Link
+                    href="/app/account/settings"
+                    className="flex items-center"
+                  >
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                   </Link>
@@ -108,5 +138,5 @@ export function Header({ onSearch }: HeaderProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }

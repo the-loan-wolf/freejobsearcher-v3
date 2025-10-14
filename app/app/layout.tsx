@@ -23,7 +23,7 @@ export default function RootLayout({
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
-        <ParticleBackground />
+        {/* <ParticleBackground /> */}
         <div className="relative z-10">
           <Providers>
             <Suspense fallback={null}>{children}</Suspense>

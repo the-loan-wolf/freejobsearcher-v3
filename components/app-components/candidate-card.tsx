@@ -79,7 +79,7 @@ export function CandidateGridSkeleton() {
 
 export function CandidateCard({ candidate }: CandidateCardProps) {
   return (
-    <Card className="group glass hover:glass-strong transition-all duration-100 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
+    <Card className="group glass hover:glass-strong transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
       <CardContent className="p-6">
         <div className="flex flex-col items-center text-center space-y-4">
           <Avatar className="h-20 w-20 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
