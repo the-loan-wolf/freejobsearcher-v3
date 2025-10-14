@@ -20,6 +20,63 @@ interface CandidateCardProps {
   candidate: Candidate;
 }
 
+export function CandidateGridSkeleton() {
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <Card
+            key={i}
+            className="group glass border-primary/10 p-6 animate-pulse"
+          >
+            <CardContent className="p-0 flex flex-col items-center text-center space-y-4">
+              {/* Avatar */}
+              <div className="h-20 w-20 rounded-full bg-muted ring-2 ring-primary/10" />
+
+              {/* Name and Role */}
+              <div className="space-y-2 w-full">
+                <div className="h-5 bg-muted rounded w-2/3 mx-auto" />
+                <div className="h-4 bg-muted rounded w-1/2 mx-auto" />
+              </div>
+
+              {/* Location and Experience */}
+              <div className="space-y-1 w-full">
+                <div className="h-3 bg-muted rounded w-1/3 mx-auto" />
+                <div className="h-3 bg-muted rounded w-1/4 mx-auto" />
+              </div>
+
+              {/* Skills */}
+              <div className="flex flex-wrap justify-center gap-2 mt-2">
+                {[...Array(3)].map((_, j) => (
+                  <div
+                    key={j}
+                    className="h-5 w-16 bg-muted rounded-full"
+                  />
+                ))}
+              </div>
+
+              {/* Divider */}
+              <div className="w-full border-t border-primary/10 pt-4 mt-2" />
+
+              {/* Salary */}
+              <div className="flex items-center justify-between w-full px-2">
+                <div className="h-3 bg-muted rounded w-1/3" />
+                <div className="h-4 bg-muted rounded w-1/4" />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2 w-full mt-3">
+                <div className="h-9 flex-1 bg-muted rounded-md" />
+                <div className="h-9 w-10 bg-muted rounded-md" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function CandidateCard({ candidate }: CandidateCardProps) {
   return (
     <Card className="group glass hover:glass-strong transition-all duration-100 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">

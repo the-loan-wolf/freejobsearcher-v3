@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { CandidateCard } from "@/components/app-components/candidate-card"
+import { CandidateCard, CandidateGridSkeleton } from "@/components/app-components/candidate-card"
 import { Button } from "@/components/app-components/ui/button"
 import { useQuery } from "@tanstack/react-query"
 
@@ -47,7 +47,7 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   );
 
   // Conditional render (not early return)
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <CandidateGridSkeleton />
   if (error) return <p>Error: {error.message}</p>;
 
   return (
