@@ -1,5 +1,5 @@
 - ~~Add skeleton for client card component on homepage~~
-- skeleton stoped working while loading profile page
+- ~~skeleton stoped working while loading profile page~~
 - making authentication routes
 - change theme(it's very dark and resource intensive due to the background particles effect)
 - check resume updating route

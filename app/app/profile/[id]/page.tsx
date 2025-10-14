@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -28,13 +28,11 @@ import {
   AvatarFallback,
 } from "@/components/app-components/ui/avatar";
 import Link from "next/link";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 async function fetchFeed(uid: string) {
   const res = await fetch(`https://freejob.patna.workers.dev/resume/${uid}`);
-  if (res.status === 404) {
-    notFound();
-  }
+  if (res.status === 404) notFound();
   const data = await res.json();
   return data;
 }
@@ -45,31 +43,44 @@ interface ProfilePageProps {
   };
 }
 
-// Loading Skeleton or Placeholder while data fetches
-function LoadingFallback() {
+// 🧱 Skeleton UI shown while loading
+function ProfileSkeleton() {
   return (
-    <div className="min-h-screen flex items-center justify-center text-muted-foreground">
-      {/* <div className="animate-pulse text-center space-y-3">
-        <div className="h-6 w-48 bg-muted rounded mx-auto" />
-        <div className="h-6 w-32 bg-muted rounded mx-auto" />
-      </div> */}
-      <div className="animate-pulse container mx-auto px-4 py-8">
+    <div className="min-h-screen animate-pulse bg-background">
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Summary */}
+          {/* Left column skeleton */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 min-w-1/2"></div>
+            <Card className="p-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="h-32 w-32 rounded-full bg-muted" />
+                <div className="h-5 w-2/3 bg-muted rounded" />
+                <div className="h-4 w-1/2 bg-muted rounded" />
+                <div className="h-3 w-1/3 bg-muted rounded" />
+                <div className="h-3 w-1/4 bg-muted rounded" />
+                <div className="w-full border-t border-border/50 pt-4 mt-2 space-y-3">
+                  <div className="h-4 w-1/2 bg-muted rounded mx-auto" />
+                  <div className="flex flex-col gap-2">
+                    <div className="h-10 bg-muted rounded" />
+                    <div className="h-10 bg-muted rounded" />
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
 
-          {/* Right Column - Detailed Information */}
+          {/* Right column skeleton */}
           <div className="lg:col-span-2 space-y-6">
-            {/* About */}
-            <div className="w-1/2"></div>
-
-            {/* Contact Info */}
-            <div className="w-1/2"></div>
-
-            {/* Skills */}
-            <div className="w-1/2"></div>
+            {[...Array(5)].map((_, i) => (
+              <Card key={i} className="p-6 space-y-4">
+                <div className="h-5 w-1/3 bg-muted rounded" />
+                <div className="space-y-2">
+                  {[...Array(3)].map((__, j) => (
+                    <div key={j} className="h-3 w-full bg-muted rounded" />
+                  ))}
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </div>
@@ -77,14 +88,22 @@ function LoadingFallback() {
   );
 }
 
-// ✅ Actual profile content separated into its own Suspense-ready component
-function ProfileContent({ candidateId }: { candidateId: string }) {
-  const { data: candidate } = useSuspenseQuery({
-    queryKey: [candidateId],
+// 💡 Main page with conditional rendering
+export default function ProfilePage({ params }: ProfilePageProps) {
+  const candidateId = params.id;
+  if (!candidateId) notFound();
+
+  const {
+    data: candidate,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["candidateProfile", candidateId],
     queryFn: () => fetchFeed(candidateId),
   });
 
-  if (!candidate) notFound();
+  if (isLoading) return <ProfileSkeleton />;
+  if (isError || !candidate) notFound();
 
   return (
     <div className="min-h-screen bg-background">
@@ -196,15 +215,12 @@ function ProfileContent({ candidateId }: { candidateId: string }) {
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Map over the phones array */}
                 {candidate.contact?.phones?.map((phone: any, i: number) => (
                   <div key={`phone-${i}`} className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-primary" />
                     <span>{phone}</span>
                   </div>
                 ))}
-
-                {/* Map over the emails array */}
                 {candidate.contact?.emails?.map((email: any, i: number) => (
                   <div key={`email-${i}`} className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-primary" />
@@ -319,18 +335,5 @@ function ProfileContent({ candidateId }: { candidateId: string }) {
         </div>
       </div>
     </div>
-  );
-}
-
-// ✅ Main component using Suspense boundary
-export default function ProfilePage({ params }: ProfilePageProps) {
-  const candidateId = params.id;
-
-  if (!candidateId) notFound();
-
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <ProfileContent candidateId={candidateId} />
-    </Suspense>
   );
 }
