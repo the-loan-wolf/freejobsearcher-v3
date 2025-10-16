@@ -41,6 +41,11 @@ export default function RootLayout({
           property="og:title"
           content={"FreeJobSearcher | Find Job while sitting at your home"}
         />
+        <meta property="og:site_name" content={"FreeJobSearcher"} />
+        <meta
+          property="og:description"
+          content={"Find Job while sitting at your home"}
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={"https://freejobsearcher.com"} />
         <meta
