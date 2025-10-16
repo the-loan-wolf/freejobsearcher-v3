@@ -32,15 +32,43 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtag/js?id=G-NMT1XBV8YT"
           strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-NMT1XBV8YT');
+    `,
+          }}
+        />
+        <meta
+          property="og:title"
+          content={"FreeJobSearcher | Find Job while sitting at your home"}
+        />
+        <meta property="og:site_name" content={"FreeJobSearcher"} />
+        <meta
+          property="og:description"
+          content={"Find Job while sitting at your home"}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={"https://freejobsearcher.com"} />
+        <meta
+          property="og:image"
+          content="https://freejobsearcher.com/freejobsearcher.avif"
+        />
 
-        gtag('config', 'G-NMT1XBV8YT');
-      `}
-        </Script>
+        {/* Twitter Cards */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={"FreeJobSearcher"} />
+        <meta
+          name="twitter:description"
+          content="Find Job while sitting at your home"
+        />
+        <meta
+          name="twitter:image"
+          content="https://freejobsearcher.com/freejobsearcher.avif"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
