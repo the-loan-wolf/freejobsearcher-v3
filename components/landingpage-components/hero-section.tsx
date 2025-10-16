@@ -50,7 +50,7 @@ export function HeroSection() {
             className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center mb-12"
             style={{ animationDelay: "0.4s" }}
           >
-            <Link href="/app/login" prefetch={true}>
+            <Link href="/app/signup" prefetch={true}>
               <Button size="lg" className="text-lg px-8 py-6 group">
                 Create Your Profile
                 <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

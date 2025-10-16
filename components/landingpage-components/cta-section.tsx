@@ -42,7 +42,7 @@ export function CTASection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/app/login" prefetch={true}>
+            <Link href="/app/signup" prefetch={true}>
               <Button size="lg" className="text-lg px-8 py-6 group">
                 Create Free Account
                 <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

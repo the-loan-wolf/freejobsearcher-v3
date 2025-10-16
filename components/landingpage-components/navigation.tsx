@@ -52,12 +52,12 @@ export function Navigation() {
               >
                 About
               </a>
-              <Link href="/app/login" prefetch={true}>
+              <Link href="/app/signin" prefetch={true}>
                 <Button variant="outline" className="mr-2 bg-transparent">
                   Sign In
                 </Button>
               </Link>
-              <Link href="/app/login" prefetch={true}>
+              <Link href="/app/signup" prefetch={true}>
                 <Button>Get Started</Button>
               </Link>
             </div>
@@ -100,10 +100,16 @@ export function Navigation() {
                 About
               </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                <Button variant="outline" size="sm">
-                  Sign In
-                </Button>
-                <Button size="sm">Get Started</Button>
+                <Link href="/app/signin" className="w-full">
+                  <Button id="signin-btn" variant="outline" size="sm" className="w-full">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/app/signup" className="w-full">
+                  <Button id="signup-btn" size="sm" className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
