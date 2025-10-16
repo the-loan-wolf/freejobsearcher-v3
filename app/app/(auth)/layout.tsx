@@ -11,19 +11,16 @@ export default function AuthLayout({
   const pathname = usePathname();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={pathname}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.25 }}
-          className="bg-white p-8 rounded-2xl shadow-lg w-96"
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.25 }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
