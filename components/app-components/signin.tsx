@@ -10,11 +10,13 @@ import { Card } from "@/components/app-components/ui/card";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "@/lib/firebaseLib";
 import { toast } from "sonner"
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
@@ -30,6 +32,7 @@ export default function SignInPage() {
       if (photoURL) localStorage.setItem("photoURL", photoURL);
       toast.success("Logged In Successful!")
       setIsLoading(false)
+      setTimeout(() => router.push('/app'), 500);
     } catch (error) {
       console.log(error);
       toast.error("Not able to sign in");

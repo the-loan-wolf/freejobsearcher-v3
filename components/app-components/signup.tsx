@@ -7,6 +7,10 @@ import Link from "next/link";
 import { Button } from "@/components/app-components/ui/button";
 import { Input } from "@/components/app-components/ui/input";
 import { Card } from "@/components/app-components/ui/card";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { app } from "@/lib/firebaseLib";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +21,10 @@ export default function SignUpPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
+
+  // Initialize Firebase Authentication and get a reference to the service
+  const auth = getAuth(app);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,8 +41,21 @@ export default function SignUpPage() {
     }
 
     setIsLoading(true);
-    // Add your sign up logic here
-    setTimeout(() => setIsLoading(false), 1000);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      await updateProfile(userCredential.user, { displayName: formData.name });
+      const { uid, displayName } = userCredential.user;
+      localStorage.setItem("loggedInUser", uid);
+      if (displayName) localStorage.setItem("displayName", displayName);
+      toast.success("Sign UP Successful")
+      await sendEmailVerification(userCredential.user);
+      toast.success("Email Verification sent!");
+      setIsLoading(false);
+      setTimeout(() => router.push('/app'), 500);
+
+    } catch (error) {
+      toast.error("Sign Up Failed")
+    }
   };
 
   return (
@@ -139,7 +160,7 @@ export default function SignUpPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
             >
               {isLoading ? "Creating account..." : "Create account"}
             </Button>
