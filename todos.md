@@ -1,7 +1,10 @@
 - ~~Add skeleton for client card component on homepage~~
 - ~~skeleton stoped working while loading profile page~~
-- making authentication routes
+- ~~making authentication routes~~
 - ~~change theme(it's very dark and resource intensive due to the background particles effect)~~
 - check resume updating route
 - make setting page work by sending settings values to backend
 - ~~add opengraph & twitter card~~
+- connect authentication routes to backend
+- add signin button on app homepage
+- if already signed in give load more button on app homepage

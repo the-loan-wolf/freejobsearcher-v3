@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { Toaster } from "@/components/app-components/ui/sonner"
 
 export default function AuthLayout({
   children,
@@ -21,6 +22,7 @@ export default function AuthLayout({
       >
         {children}
       </motion.div>
+      <Toaster />
     </AnimatePresence>
   );
 }

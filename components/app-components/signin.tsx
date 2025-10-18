@@ -7,17 +7,33 @@ import Link from "next/link";
 import { Button } from "@/components/app-components/ui/button";
 import { Input } from "@/components/app-components/ui/input";
 import { Card } from "@/components/app-components/ui/card";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "@/lib/firebaseLib";
+import { toast } from "sonner"
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Initialize Firebase Authentication and get a reference to the service
+  const auth = getAuth(app);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Add your sign in logic here
-    setTimeout(() => setIsLoading(false), 1000);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const { uid, displayName, photoURL } = userCredential.user;
+      localStorage.setItem("loggedInUser", uid);
+      if (displayName) localStorage.setItem("displayName", displayName);
+      if (photoURL) localStorage.setItem("photoURL", photoURL);
+      toast.success("Logged In Successful!")
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error);
+      toast.error("Not able to sign in");
+    }
   };
 
   return (
@@ -84,7 +100,7 @@ export default function SignInPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
             >
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>

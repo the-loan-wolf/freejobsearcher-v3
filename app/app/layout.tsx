@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { ParticleBackground } from "@/components/app-components/particle-background";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Toaster } from "@/components/app-components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "FreeJobSearcher - Find Your Perfect Candidate",
@@ -74,6 +75,7 @@ export default function RootLayout({
             <Suspense fallback={null}>{children}</Suspense>
           </Providers>
         </div>
+        <Toaster />
       </body>
     </html>
   );
