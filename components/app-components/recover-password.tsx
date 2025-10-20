@@ -7,20 +7,28 @@ import Link from "next/link";
 import { Button } from "@/components/app-components/ui/button";
 import { Input } from "@/components/app-components/ui/input";
 import { Card } from "@/components/app-components/ui/card";
+import { toast } from "sonner";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { app } from "@/lib/firebaseLib";
 
 export default function RecoverPasswordPage() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const auth = getAuth(app);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Add your password recovery logic here
-    setTimeout(() => {
+    //Add your password recovery logic here
+    try {
+      sendPasswordResetEmail(auth, email);
       setIsLoading(false);
+      toast.success("Email sent!");
       setSubmitted(true);
-    }, 1000);
+    } catch (error) {
+      toast.error("Email not sent!");
+    }
   };
 
   return (
