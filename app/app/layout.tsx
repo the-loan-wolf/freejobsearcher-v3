@@ -23,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {process.env.NODE_ENV === "development" && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}
         {/* <!-- Google tag (gtag.js) --> */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-NMT1XBV8YT"
