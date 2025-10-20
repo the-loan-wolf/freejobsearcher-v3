@@ -28,8 +28,12 @@ interface HeaderProps {
 export function Header({ onSearch }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
 
   useEffect(() => {
+    setIsLoggedIn(localStorage.getItem("loggedInUser"));
+    setDisplayName(localStorage.getItem("displayName"));
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -42,9 +46,8 @@ export function Header({ onSearch }: HeaderProps) {
 
   return (
     <header
-      className={`sticky top-0 z-5 transition-all duration-300 ${
-        isScrolled ? "glass-card" : "bg-transparent"
-      }`}
+      className={`sticky top-0 z-5 transition-all duration-300 ${isScrolled ? "glass-card" : "bg-transparent"
+        }`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -87,7 +90,7 @@ export function Header({ onSearch }: HeaderProps) {
               />
             </div>
 
-            <DropdownMenu>
+            {isLoggedIn && (<DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
@@ -95,12 +98,12 @@ export function Header({ onSearch }: HeaderProps) {
                   className="flex items-center space-x-2 glass border-primary/20 hover:border-primary/40 hover:bg-primary/10 bg-transparent"
                 >
                   <Avatar className="h-6 w-6 ring-2 ring-primary/20">
-                    <AvatarImage src="/user-avatar.jpg" alt="User" />
+                    <AvatarImage src="/placeholder-user.jpg" alt="User" />
                     <AvatarFallback className="bg-primary/20 text-primary">
-                      JD
+                      {displayName}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline">Summer smith</span>
+                  <span className="hidden sm:inline">{displayName}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -133,7 +136,8 @@ export function Header({ onSearch }: HeaderProps) {
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu>)
+            }
           </div>
         </div>
       </div>

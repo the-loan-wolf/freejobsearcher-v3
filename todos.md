@@ -5,6 +5,6 @@
 - check resume updating route
 - make setting page work by sending settings values to backend
 - ~~add opengraph & twitter card~~
-- connect authentication routes to backend
+- ~~connect authentication routes to backend~~
 - add signin button on app homepage
 - if already signed in give load more button on app homepage
