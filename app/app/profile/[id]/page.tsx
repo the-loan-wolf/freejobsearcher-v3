@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { use } from "react";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -38,9 +38,9 @@ async function fetchFeed(uid: string) {
 }
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // 🧱 Skeleton UI shown while loading
@@ -88,9 +88,10 @@ function ProfileSkeleton() {
   );
 }
 
-// 💡 Main page with conditional rendering
+// Main page with conditional rendering
 export default function ProfilePage({ params }: ProfilePageProps) {
-  const candidateId = params.id;
+  const { id } = use(params);
+  const candidateId = id;
   if (!candidateId) notFound();
 
   const {
