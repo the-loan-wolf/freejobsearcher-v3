@@ -9,7 +9,19 @@ interface CandidateGridProps {
   searchQuery?: string
 }
 
-async function fetchFeed() {
+interface Candidate {
+  id: string;
+  name: string;
+  role: string;
+  location: string;
+  salary: string;
+  image: string;
+  experience: string;
+  bio: string;
+  skills: string[];
+}
+
+async function fetchFeed(): Promise<Candidate[]> {
   const res = await fetch("https://freejob.patna.workers.dev/user/feed");
   if (!res.ok) throw new Error("Failed to fetch feed");
   return res.json();
