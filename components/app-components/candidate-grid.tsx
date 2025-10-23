@@ -9,7 +9,6 @@ import { Button } from "@/components/app-components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getAuth } from "firebase/auth";
 import { app } from "@/lib/firebaseLib";
-import { useRouter } from 'next/navigation'
 import Link from "next/link";
 
 interface CandidateGridProps {
@@ -38,7 +37,6 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const [visibleCount, setVisibleCount] = useState(6);
   const auth = getAuth(app);
   const user = auth.currentUser;
-  const router = useRouter()
   const { data, error, isLoading } = useQuery({
     queryKey: ["userFeed"],
     queryFn: fetchFeed,
