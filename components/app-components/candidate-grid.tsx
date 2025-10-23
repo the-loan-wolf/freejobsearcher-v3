@@ -1,12 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { CandidateCard, CandidateGridSkeleton } from "@/components/app-components/candidate-card"
-import { Button } from "@/components/app-components/ui/button"
-import { useQuery } from "@tanstack/react-query"
+import { useState, useMemo } from "react";
+import {
+  CandidateCard,
+  CandidateGridSkeleton,
+} from "@/components/app-components/candidate-card";
+import { Button } from "@/components/app-components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getAuth } from "firebase/auth";
+import { app } from "@/lib/firebaseLib";
+import { useRouter } from 'next/navigation'
+import Link from "next/link";
 
 interface CandidateGridProps {
-  searchQuery?: string
+  searchQuery?: string;
 }
 
 interface Candidate {
@@ -28,7 +35,10 @@ async function fetchFeed(): Promise<Candidate[]> {
 }
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
-  const [visibleCount, setVisibleCount] = useState(6)
+  const [visibleCount, setVisibleCount] = useState(6);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+  const router = useRouter()
   const { data, error, isLoading } = useQuery({
     queryKey: ["userFeed"],
     queryFn: fetchFeed,
@@ -59,14 +69,15 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   );
 
   // Conditional render (not early return)
-  if (isLoading) return <CandidateGridSkeleton />
+  if (isLoading) return <CandidateGridSkeleton />;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="space-y-8">
       {searchQuery && (
         <div className="text-sm text-muted-foreground">
-          Found {filteredCandidates.length} candidate{filteredCandidates.length !== 1 ? "s" : ""}
+          Found {filteredCandidates.length} candidate
+          {filteredCandidates.length !== 1 ? "s" : ""}
           {searchQuery && ` for "${searchQuery}"`}
         </div>
       )}
@@ -79,18 +90,28 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
 
       {filteredCandidates.length === 0 && searchQuery && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No candidates found matching your search.</p>
-          <p className="text-sm text-muted-foreground mt-2">Try adjusting your search terms.</p>
+          <p className="text-muted-foreground">
+            No candidates found matching your search.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try adjusting your search terms.
+          </p>
         </div>
       )}
 
-      {visibleCount < filteredCandidates.length && (
+      {user ? visibleCount < filteredCandidates.length && (
         <div className="flex justify-center">
           <Button onClick={loadMore} variant="outline" size="lg">
             Load More Candidates
           </Button>
         </div>
+      ) : (
+        <div className="flex justify-center">
+          <Link href={'/app/signin'}>
+            <Button> Sign In to see more</Button>
+          </Link>
+        </div>
       )}
     </div>
-  )
+  );
 }
