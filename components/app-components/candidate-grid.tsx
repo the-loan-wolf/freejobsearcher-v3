@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   CandidateCard,
   CandidateGridSkeleton,
 } from "@/components/app-components/candidate-card";
 import { Button } from "@/components/app-components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { app } from "@/lib/firebaseLib";
 import Link from "next/link";
 
@@ -35,12 +35,20 @@ async function fetchFeed(): Promise<Candidate[]> {
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const [visibleCount, setVisibleCount] = useState(6);
+  const [user, setUser] = useState<User | null>(null);
   const auth = getAuth(app);
-  const user = auth.currentUser;
   const { data, error, isLoading } = useQuery({
     queryKey: ["userFeed"],
     queryFn: fetchFeed,
   });
+
+  // Listen for Firebase auth changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, [auth]);
 
   const filteredCandidates = useMemo(() => {
     if (!data) return []; // safely handle undefined
@@ -105,8 +113,8 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
         </div>
       ) : (
         <div className="flex justify-center">
-          <Link href={'/app/signin'}>
-            <Button> Sign In to see more</Button>
+          <Link href={'/app/signin'} className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90">
+            Sign In to see more
           </Link>
         </div>
       )}
