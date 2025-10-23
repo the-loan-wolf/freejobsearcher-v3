@@ -20,28 +20,54 @@ import {
   AvatarImage,
 } from "@/components/app-components/ui/avatar";
 import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import { app } from "@/lib/firebaseLib";
+import { toast } from "sonner";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
 export function Header({ onSearch }: HeaderProps) {
+  const auth = getAuth(app);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Listen for Firebase auth changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, [auth]);
 
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("loggedInUser"));
-    setDisplayName(localStorage.getItem("displayName"));
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch?.(e.target.value);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth(app);
+      await signOut(auth);
+      toast.success("Signed out successfully!");
+      // Optional: clear local storage if you stored anything
+      // localStorage.removeItem("loggedInUser");
+      // localStorage.removeItem("displayName");
+      // localStorage.removeItem("photoURL");
+      // Redirect after a short delay (for toast to show)
+      // setTimeout(() => router.push("/signin"), 300);
+    } catch (error) {
+      console.error("Error during sign out:", error);
+      toast.error("Failed to sign out. Try again.");
+    }
   };
 
   return (
@@ -90,7 +116,7 @@ export function Header({ onSearch }: HeaderProps) {
               />
             </div>
 
-            {isLoggedIn && (<DropdownMenu>
+            {user && (<DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
@@ -98,12 +124,12 @@ export function Header({ onSearch }: HeaderProps) {
                   className="flex items-center space-x-2 glass border-primary/20 hover:border-primary/40 hover:bg-primary/10 bg-transparent"
                 >
                   <Avatar className="h-6 w-6 ring-2 ring-primary/20">
-                    <AvatarImage src="/placeholder-user.jpg" alt="User" />
+                    <AvatarImage src={user.photoURL || "/placeholder-user.jpg"} alt="User" />
                     <AvatarFallback className="bg-primary/20 text-primary">
-                      {displayName}
+                      {user.displayName}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline">{displayName}</span>
+                  <span className="hidden sm:inline">{user.displayName}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -131,7 +157,7 @@ export function Header({ onSearch }: HeaderProps) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem onSelect={handleLogout} className="text-red-600">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>

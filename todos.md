@@ -8,3 +8,5 @@
 - ~~connect authentication routes to backend~~
 - ~~add signin button on app homepage~~
 - if already signed in give load more button on app homepage
+- ~~use firebase function to determine if a user is signed in or not in header bar~~
+- ~~connect log out button with firebase auth in the header bar~~
