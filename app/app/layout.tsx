@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import { ParticleBackground } from "@/components/app-components/particle-background";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Toaster } from "@/components/app-components/ui/toaster";
+import { Toaster } from "@/components/app-components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "FreeJobSearcher - Find Your Perfect Candidate",
