@@ -44,9 +44,9 @@ export default function SignUpPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await updateProfile(userCredential.user, { displayName: formData.name });
-      const { uid, displayName } = userCredential.user;
-      localStorage.setItem("loggedInUser", uid);
-      if (displayName) localStorage.setItem("displayName", displayName);
+      // const { uid, displayName } = userCredential.user;
+      // localStorage.setItem("loggedInUser", uid);
+      // if (displayName) localStorage.setItem("displayName", displayName);
       toast.success("Sign UP Successful")
       await sendEmailVerification(userCredential.user);
       toast.success("Email Verification sent!");

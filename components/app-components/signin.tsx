@@ -26,10 +26,10 @@ export default function SignInPage() {
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      const { uid, displayName, photoURL } = userCredential.user;
-      localStorage.setItem("loggedInUser", uid);
-      if (displayName) localStorage.setItem("displayName", displayName);
-      if (photoURL) localStorage.setItem("photoURL", photoURL);
+      // const { uid, displayName, photoURL } = userCredential.user;
+      // localStorage.setItem("loggedInUser", uid);
+      // if (displayName) localStorage.setItem("displayName", displayName);
+      // if (photoURL) localStorage.setItem("photoURL", photoURL);
       toast.success("Logged In Successful!")
       setIsLoading(false)
       setTimeout(() => router.push('/app'), 500);
