@@ -78,7 +78,7 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
         candidate.name.toLowerCase().includes(query) ||
         candidate.role.toLowerCase().includes(query) ||
         candidate.location.toLowerCase().includes(query) ||
-        candidate.skills.some((skill) => skill.toLowerCase().includes(query))
+        candidate.skills.some((skill) => skill.toLowerCase().includes(query)),
     );
   }, [searchQuery, data]);
 
@@ -88,7 +88,7 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
 
   const displayedCandidates = filteredCandidates.slice(
     0,
-    Math.min(visibleCount, filteredCandidates.length)
+    Math.min(visibleCount, filteredCandidates.length),
   );
 
   // Conditional render (not early return)
@@ -122,15 +122,20 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
         </div>
       )}
 
-      {user ? visibleCount < filteredCandidates.length && (
-        <div className="flex justify-center">
-          <Button onClick={loadMore} variant="outline" size="lg">
-            Load More Candidates
-          </Button>
-        </div>
+      {user ? (
+        visibleCount < filteredCandidates.length && (
+          <div className="flex justify-center">
+            <Button onClick={loadMore} variant="outline" size="lg">
+              Load More Candidates
+            </Button>
+          </div>
+        )
       ) : (
         <div className="flex justify-center">
-          <Link href={'/app/signin'} className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90">
+          <Link
+            href={"/app/signin"}
+            className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90"
+          >
             Sign In to see more
           </Link>
         </div>
