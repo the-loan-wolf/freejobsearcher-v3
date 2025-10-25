@@ -8,6 +8,13 @@ import {
 import { Button } from "@/components/app-components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  limit,
+  query,
+} from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import Link from "next/link";
 
@@ -27,19 +34,29 @@ interface Candidate {
   skills: string[];
 }
 
-async function fetchFeed(): Promise<Candidate[]> {
-  const res = await fetch("https://freejob.patna.workers.dev/user/feed");
-  if (!res.ok) throw new Error("Failed to fetch feed");
-  return res.json();
+const db = getFirestore(app);
+async function fetchFeed(user: User | null): Promise<Candidate[]> {
+  const collectionRef = collection(db, "resumes");
+  const q = query(collectionRef, limit(user ? 6 : 5));
+  const querySnapshot = await getDocs(q);
+  const documents: Candidate[] = [];
+  querySnapshot.forEach((doc) => {
+    documents.push({
+      id: doc.id,
+      ...doc.data().profile,
+      skills: [...doc.data().skills],
+    });
+  });
+  return documents;
 }
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(5);
   const [user, setUser] = useState<User | null>(null);
   const auth = getAuth(app);
   const { data, error, isLoading } = useQuery({
-    queryKey: ["userFeed"],
-    queryFn: fetchFeed,
+    queryKey: ["userFeed", user?.uid],
+    queryFn: () => fetchFeed(user),
   });
 
   // Listen for Firebase auth changes
