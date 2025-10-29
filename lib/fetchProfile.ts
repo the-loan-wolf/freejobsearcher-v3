@@ -20,7 +20,7 @@ const db = getFirestore(app);
 //   createdAt: Timestamp; // or Timestamp from Firestore
 // };
 
-interface Profile {
+export interface Profile {
   id: string;
   name: string;
   role: string;

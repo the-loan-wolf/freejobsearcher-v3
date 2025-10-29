@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { fetchProfile, Post } from "../lib/fetchProfile";
+import { fetchProfile, Profile} from "../lib/fetchProfile";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 
 export const usePaginatedPosts = (pageSize = 10) => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Profile[]>([]);
   const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot | null>(null);
   const [loading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
