@@ -3,7 +3,6 @@
 import { use } from "react";
 import { notFound } from "next/navigation";
 import {
-  ArrowLeft,
   MapPin,
   Clock,
   Star,
@@ -43,7 +42,7 @@ interface ProfilePageProps {
   }>;
 }
 
-// 🧱 Skeleton UI shown while loading
+// Skeleton UI shown while loading
 function ProfileSkeleton() {
   return (
     <div className="min-h-screen animate-pulse bg-background">
@@ -112,11 +111,11 @@ export default function ProfilePage({ params }: ProfilePageProps) {
       <div className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/app">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Search
-              </Button>
+            <Link
+              href="/app"
+              className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300"
+            >
+              FreeJobSearcher
             </Link>
             <h1 className="text-xl font-bold text-foreground">
               Profile Details
