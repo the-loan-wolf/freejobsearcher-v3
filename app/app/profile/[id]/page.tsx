@@ -113,7 +113,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
           <div className="flex items-center gap-4">
             <Link
               href="/app"
-              className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300"
+              className="hidden md:block text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300"
             >
               FreeJobSearcher
             </Link>
