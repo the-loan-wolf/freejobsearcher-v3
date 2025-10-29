@@ -8,6 +8,6 @@
 - ~~if already signed in give load more button on app homepage~~
 - ~~use firebase function to determine if a user is signed in or not in header bar~~
 - ~~connect log out button with firebase auth in the header bar~~
-- make load more button to fetch next 5 profile
+- ~~make load more button to fetch next 5 profile~~ (loadmore branch)
 - check resume updating route
 - make setting page work by sending settings values to backend
