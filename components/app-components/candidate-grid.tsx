@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import Link from "next/link";
+import { usePaginatedPosts } from "@/hooks/usePaginatedPosts";
 
 interface CandidateGridProps {
   searchQuery?: string;
@@ -51,13 +52,14 @@ async function fetchFeed(user: User | null): Promise<Candidate[]> {
 }
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
-  const [visibleCount, setVisibleCount] = useState(5);
+  const { posts, loadMore, loading, noMore } = usePaginatedPosts(5);
+  // const [visibleCount, setVisibleCount] = useState(5);
   const [user, setUser] = useState<User | null>(null);
   const auth = getAuth(app);
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["userFeed", user?.uid],
-    queryFn: () => fetchFeed(user),
-  });
+  // const { data, error, isLoading } = useQuery({
+  //   queryKey: ["userFeed", user?.uid],
+  //   queryFn: () => fetchFeed(user),
+  // });
 
   // Listen for Firebase auth changes
   useEffect(() => {
@@ -67,51 +69,51 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
     return unsubscribe;
   }, [auth]);
 
-  const filteredCandidates = useMemo(() => {
-    if (!data) return []; // safely handle undefined
+  // const filteredCandidates = useMemo(() => {
+  //   if (!data) return []; // safely handle undefined
 
-    if (!searchQuery.trim()) return data;
+  //   if (!searchQuery.trim()) return data;
 
-    const query = searchQuery.toLowerCase();
-    return data.filter(
-      (candidate) =>
-        candidate.name.toLowerCase().includes(query) ||
-        candidate.role.toLowerCase().includes(query) ||
-        candidate.location.toLowerCase().includes(query) ||
-        candidate.skills.some((skill) => skill.toLowerCase().includes(query)),
-    );
-  }, [searchQuery, data]);
+  //   const query = searchQuery.toLowerCase();
+  //   return data.filter(
+  //     (candidate) =>
+  //       candidate.name.toLowerCase().includes(query) ||
+  //       candidate.role.toLowerCase().includes(query) ||
+  //       candidate.location.toLowerCase().includes(query) ||
+  //       candidate.skills.some((skill) => skill.toLowerCase().includes(query)),
+  //   );
+  // }, [searchQuery, data]);
 
-  const loadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 6, filteredCandidates.length));
-  };
+  // const loadMore = () => {
+  //   setVisibleCount((prev) => Math.min(prev + 6, filteredCandidates.length));
+  // };
 
-  const displayedCandidates = filteredCandidates.slice(
-    0,
-    Math.min(visibleCount, filteredCandidates.length),
-  );
+  // const displayedCandidates = filteredCandidates.slice(
+  //   0,
+  //   Math.min(visibleCount, filteredCandidates.length),
+  // );
 
   // Conditional render (not early return)
-  if (isLoading) return <CandidateGridSkeleton />;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <CandidateGridSkeleton />;
+  // if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="space-y-8">
-      {searchQuery && (
+      {/*{searchQuery && (
         <div className="text-sm text-muted-foreground">
           Found {filteredCandidates.length} candidate
           {filteredCandidates.length !== 1 ? "s" : ""}
           {searchQuery && ` for "${searchQuery}"`}
         </div>
-      )}
+      )}*/}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayedCandidates.map((candidate) => (
+        {posts.map((candidate) => (
           <CandidateCard key={candidate.id} candidate={candidate} />
         ))}
       </div>
 
-      {filteredCandidates.length === 0 && searchQuery && (
+      {/*{filteredCandidates.length === 0 && searchQuery && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">
             No candidates found matching your search.
@@ -120,10 +122,11 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
             Try adjusting your search terms.
           </p>
         </div>
-      )}
+      )}*/}
 
       {user ? (
-        visibleCount < filteredCandidates.length && (
+        !loading &&
+        !noMore && (
           <div className="flex justify-center">
             <Button onClick={loadMore} variant="outline" size="lg">
               Load More Candidates
