@@ -27,7 +27,7 @@ export function CandidateGridSkeleton() {
         {[...Array(6)].map((_, i) => (
           <Card
             key={i}
-            className="group glass border-primary/10 p-6 animate-pulse"
+            className="group border-primary/10 p-6 animate-pulse"
           >
             <CardContent className="p-0 flex flex-col items-center text-center space-y-4">
               {/* Avatar */}
@@ -79,7 +79,7 @@ export function CandidateGridSkeleton() {
 
 export function CandidateCard({ candidate }: CandidateCardProps) {
   return (
-    <Card className="group glass hover:glass-strong transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
+    <Card className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
       <CardContent className="p-6">
         <div className="flex flex-col items-center text-center space-y-4">
           <Avatar className="h-20 w-20 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
@@ -119,7 +119,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               <Badge
                 key={skill}
                 variant="secondary"
-                className="text-xs glass border-primary/10 group-hover:border-primary/20 group-hover:bg-primary/10"
+                className="text-xs border-primary/10 group-hover:border-primary/20 group-hover:bg-primary/10"
               >
                 {skill}
               </Badge>
@@ -147,7 +147,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="glass border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent"
+                className="border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent"
               >
                 <Star className="h-4 w-4" />
               </Button>
