@@ -26,9 +26,18 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/app-components/ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
+import { app } from "@/lib/firebaseLib";
+import {
+  getAuth,
+  User as firebaseuser,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
+  const [user, setUser] = useState<firebaseuser | null>(null);
   const [form, setForm] = useState({
     profile: {
       name: "example",
@@ -66,6 +75,8 @@ export default function SettingsPage() {
     ],
     skills: ["JavaScript", "node js", "php"],
   });
+
+  const auth = getAuth(app);
 
   const updateProfile = (key: string, value: string) => {
     setForm((prev) => ({
@@ -197,10 +208,7 @@ export default function SettingsPage() {
   const addEducation = () => {
     setForm((prev) => ({
       ...prev,
-      education: [
-        ...prev.education,
-        { degree: "", institution: "", year: "" },
-      ],
+      education: [...prev.education, { degree: "", institution: "", year: "" }],
     }));
   };
 
@@ -229,8 +237,28 @@ export default function SettingsPage() {
   };
 
   const handleSubmit = () => {
-    console.log("Final form state:", form);
+    // console.log("Final form state:", form);
+    const db = getFirestore(app);
+    if (user) {
+      const docRef = doc(db, "resumes", user.uid);
+      try {
+        setDoc(docRef, { ...form, createdAt: serverTimestamp() });
+        toast.success("resumes saved successfully");
+      } catch (error) {
+        console.error("Error during saving resume:", error);
+        toast.error("Failed to sign out. Try again.");
+      }
+    }
   };
+
+  // Listen for Firebase auth changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, [auth]);
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -397,7 +425,6 @@ export default function SettingsPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {form.education.map((edu, i) => (
-
                       <div key={i} className="flex items-start space-x-2">
                         <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div className="space-y-2">
