@@ -119,7 +119,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               <Badge
                 key={skill}
                 variant="secondary"
-                className="text-xs border-primary/10 group-hover:border-primary/20 group-hover:bg-primary/10"
+                className="text-xs border-primary/10 group-hover:border-primary/20 group-hover:bg-primary/90"
               >
                 {skill}
               </Badge>

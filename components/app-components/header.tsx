@@ -121,7 +121,7 @@ export function Header({ onSearch }: HeaderProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center space-x-2 glass border-primary/20 hover:border-primary/40 hover:bg-primary/10 bg-transparent"
+                  className="flex items-center space-x-2 bg-primary/10 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
                 >
                   <Avatar className="h-6 w-6 ring-2 ring-primary/20">
                     <AvatarImage src={user.photoURL || "/placeholder-user.jpg"} alt="User" />
