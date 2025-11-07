@@ -35,6 +35,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { toast } from "sonner";
+import ProfilePicUpload from "@/components/app-components/ProfilePicUpload";
 
 export default function SettingsPage() {
   const [user, setUser] = useState<firebaseuser | null>(null);
@@ -295,20 +296,7 @@ export default function SettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src="/user-avatar.jpg" alt="Profile" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <Button variant="outline" size="sm">
-                      Change Photo
-                    </Button>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      JPG, PNG or GIF. Max size 2MB.
-                    </p>
-                  </div>
-                </div>
+                <ProfilePicUpload />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
