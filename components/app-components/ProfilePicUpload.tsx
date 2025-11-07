@@ -8,6 +8,7 @@ import {
   AvatarImage,
 } from "@/components/app-components/ui/avatar";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 const storage = getStorage(app);
 
@@ -61,20 +62,19 @@ export default function ProfilePicUpload() {
         setUrl(url);
         setIsUploaded(true);
       }
+      toast.success("Image uploaded");
     } else {
       console.warn("No file selected");
-      alert("No file selected");
+      toast.warning("No file selected");
     }
   };
 
   return (
-    <div className="flex flex-col flex-wrap md:flex-row items-center space-x-4">
-      <div className="flex items-center space-x-4">
-        <Avatar className="h-16 w-16">
-          <AvatarImage src={url || "/image-profile.jpg"} alt="Profile" />
-          <AvatarFallback>JD</AvatarFallback>
-        </Avatar>
-      </div>
+    <div className="flex items-center space-x-1">
+      <Avatar className="h-16 w-16">
+        <AvatarImage src={url || "/image-profile.jpg"} alt="Profile" />
+        <AvatarFallback>Pic</AvatarFallback>
+      </Avatar>
       <input
         type="file"
         accept="image/*"
@@ -100,9 +100,9 @@ export default function ProfilePicUpload() {
         />
       )}
 
-      <Button variant="outline" size="sm" onClick={clickHandler} className="bg-lime-200 hover:-translate-y-1 hover:scale-110 hover:bg-lime-300 transition ease-in-out">
+      {url && <Button variant="outline" size="sm" onClick={clickHandler} className="bg-lime-200 hover:-translate-y-1 hover:scale-110 hover:bg-lime-300 transition ease-in-out">
         Upload Picture
-      </Button>
+      </Button>}
       {isUploaded && (
         <p className="text-xs text-red-600">
           Click &quot;Save Data&quot; Button in the bottom to save Pic
