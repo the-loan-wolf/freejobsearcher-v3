@@ -1,20 +1,39 @@
-import { ChangeEvent, useRef, useState } from "react";
 import CropperComponent from "@/components/app-components/CropperComponent";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from "@/lib/firebaseLib";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/app-components/ui/avatar";
-import { Button } from "./ui/button";
+import { app } from "@/lib/firebaseLib";
+import {
+  getAuth,
+  onAuthStateChanged,
+  updateProfile,
+  User,
+} from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 const storage = getStorage(app);
+const auth = getAuth();
 
-const uploadPic = async (picFile: File): Promise<string> => {
-  // Create a reference to the file you want to upload
-  const fileRef = ref(storage, "profile-pics/" + picFile.name);
+/**
+ * Uploads a file to Firebase Storage under a user-specific path.
+ * @param picFile The file to upload.
+ * @param userId The UID of the user.
+ * @returns A promise that resolves with the download URL.
+ */
+const uploadPic = async (picFile: File, userId: string): Promise<string> => {
+  // Use the file extension from the original file
+  const fileExtension = picFile.name.split(".").pop() || "jpg";
+  // Create a user-specific and predictable path.
+  // This will overwrite any existing profile pic for this user.
+  const fileRef = ref(
+    storage,
+    `profile-pics/${userId}/profile.${fileExtension}`,
+  );
   try {
     await uploadBytes(fileRef, picFile);
     console.log("Uploaded the pic!");
@@ -28,51 +47,152 @@ const uploadPic = async (picFile: File): Promise<string> => {
 };
 
 export default function ProfilePicUpload() {
+  // The original image file (as a data URL) to be sent to the cropper
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [croppedImage, setCroppedImage] = useState<File | null>(null);
+
+  // The *preview URL* (blob) of the *cropped* image
   const [url, setUrl] = useState("");
-  const [isUploaded, setIsUploaded] = useState(false);
-  const picInput = useRef<null | HTMLInputElement>(null);
+
+  // The *actual cropped File object* to be uploaded
+  const [croppedFile, setCroppedFile] = useState<File | null>(null);
+
+  // Dialog state for the cropper
   const [isOpen, setIsOpen] = useState(false);
 
+  // Firebase user object
+  const [user, setUser] = useState<User | null>(null);
+
+  // Loading state for the upload button
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Ref for the hidden file input
+  const picInput = useRef<null | HTMLInputElement>(null);
+
+  // --- Effects ---
+
+  // Cleanup effect for the blob URL
+  // This prevents memory leaks by revoking the old object URL
+  // when a new one is created or when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    };
+  }, [url]);
+
+  // Listen for Firebase auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, []);
+
+  // --- Handlers ---
+
+  /**
+   * Called when the user selects a file from the input.
+   * Reads the file as a data URL and opens the cropper.
+   */
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
 
+    // Reset state in case we're re-uploading
+    setCroppedFile(null);
+    if (url) {
+      URL.revokeObjectURL(url);
+      setUrl("");
+    }
+
+    const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result as string);
       setIsOpen(true);
     };
     reader.readAsDataURL(file);
-  };
 
-  const handleCropDone = (croppedFile: File) => {
-    const url = URL.createObjectURL(croppedFile);
-    setCroppedImage(croppedFile);
-    setUrl(url);
-  };
-
-  const clickHandler = async (event: React.MouseEvent) => {
-    event.preventDefault();
-    const picFile = croppedImage;
-    if (picFile) {
-      const url = await uploadPic(picFile);
-      if (!(url === "error")) {
-        setUrl(url);
-        setIsUploaded(true);
-      }
-      toast.success("Image uploaded");
-    } else {
-      console.warn("No file selected");
-      toast.warning("No file selected");
+    // Clear the file input value to allow selecting the same file again
+    if (picInput.current) {
+      picInput.current.value = "";
     }
   };
+
+  /**
+   * Called by the CropperComponent when cropping is complete.
+   * Receives the cropped file as a File object.
+   */
+  const handleCropDone = (croppedFile: File) => {
+    // 1. Store the actual File object for uploading
+    setCroppedFile(croppedFile);
+
+    // 2. Create and store a new preview URL
+    const previewUrl = URL.createObjectURL(croppedFile);
+    setUrl(previewUrl);
+  };
+
+  /**
+   * Called when the "Upload Picture" button is clicked.
+   * Uploads the croppedFile to Firebase Storage.
+   */
+  const uploadHandler = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    // Guard clauses
+    if (!croppedFile || !user) {
+      console.warn("No cropped file or user session.");
+      toast.warning("No file selected or user not logged in.");
+      setIsLoading(false);
+      return;
+    }
+
+    // 1. Upload to Storage
+    const downloadUrl = await uploadPic(croppedFile, user.uid);
+
+    if (downloadUrl === "error") {
+      setIsLoading(false);
+      return; // Error toast is handled inside uploadPic
+    }
+
+    // 2. Update Auth Profile
+    try {
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, { photoURL: downloadUrl });
+
+        // Force-update local user state to show new pic immediately
+        // Note: onAuthStateChanged will also fire, but this is faster.
+        setUser({ ...auth.currentUser, photoURL: downloadUrl });
+
+        toast.success("Image uploaded!");
+
+        // 3. Clean up
+        setCroppedFile(null);
+        setUrl(""); // The 'displayImageSrc' will now use user.photoURL
+        setImageSrc(null);
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      toast.error("Failed to update profile.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // --- Render Logic ---
+
+  // Determine which image to display:
+  // 1. The new cropped preview (if it exists)
+  // 2. The user's current photoURL (if they have one)
+  // 3. The fallback placeholder
+
+  const displayImageSrc = url || user?.photoURL || "/image-profile.jpg";
 
   return (
     <div className="flex items-center space-x-1">
       <Avatar className="h-16 w-16">
-        <AvatarImage src={url || "/image-profile.jpg"} alt="Profile" />
+        <AvatarImage src={displayImageSrc} alt="Profile" />
         <AvatarFallback>Pic</AvatarFallback>
       </Avatar>
       <input
@@ -82,7 +202,6 @@ export default function ProfilePicUpload() {
         ref={picInput}
         onChange={handleFileChange}
         className="hidden"
-        onClick={() => setCroppedImage(null)}
       />
       <label
         htmlFor="profilePic"
@@ -100,13 +219,16 @@ export default function ProfilePicUpload() {
         />
       )}
 
-      {url && <Button variant="outline" size="sm" onClick={clickHandler} className="bg-lime-200 hover:-translate-y-1 hover:scale-110 hover:bg-lime-300 transition ease-in-out">
-        Upload Picture
-      </Button>}
-      {isUploaded && (
-        <p className="text-xs text-red-600">
-          Click &quot;Save Data&quot; Button in the bottom to save Pic
-        </p>
+      {url && (
+        <Button
+          disabled={isLoading}
+          variant="outline"
+          size="sm"
+          onClick={uploadHandler}
+          className="bg-lime-200 hover:-translate-y-1 hover:scale-110 hover:bg-lime-300 transition ease-in-out"
+        >
+          {isLoading ? "Uploading..." : "Save Picture"}
+        </Button>
       )}
     </div>
   );
