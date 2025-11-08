@@ -15,6 +15,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { uploadImageAction } from "@/app/app/action";
 
 const storage = getStorage(app);
 const auth = getAuth();
@@ -136,49 +137,85 @@ export default function ProfilePicUpload() {
    * Called when the "Upload Picture" button is clicked.
    * Uploads the croppedFile to Firebase Storage.
    */
-  const uploadHandler = async (event: React.MouseEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
+  // const uploadHandler = async (event: React.MouseEvent) => {
+  //   event.preventDefault();
+  //   setIsLoading(true);
+  //
+  //   // Guard clauses
+  //   if (!croppedFile || !user) {
+  //     console.warn("No cropped file or user session.");
+  //     toast.warning("No file selected or user not logged in.");
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //
+  //   // 1. Upload to Storage
+  //   const downloadUrl = await uploadPic(croppedFile, user.uid);
+  //
+  //   if (downloadUrl === "error") {
+  //     setIsLoading(false);
+  //     return; // Error toast is handled inside uploadPic
+  //   }
+  //
+  //   // 2. Update Auth Profile
+  //   try {
+  //     if (auth.currentUser) {
+  //       await updateProfile(auth.currentUser, { photoURL: downloadUrl });
+  //
+  //       // Force-update local user state to show new pic immediately
+  //       // Note: onAuthStateChanged will also fire, but this is faster.
+  //       setUser({ ...auth.currentUser, photoURL: downloadUrl });
+  //
+  //       toast.success("Image uploaded!");
+  //
+  //       // 3. Clean up
+  //       setCroppedFile(null);
+  //       setUrl(""); // The 'displayImageSrc' will now use user.photoURL
+  //       setImageSrc(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to update profile:", error);
+  //     toast.error("Failed to update profile.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-    // Guard clauses
-    if (!croppedFile || !user) {
-      console.warn("No cropped file or user session.");
-      toast.warning("No file selected or user not logged in.");
-      setIsLoading(false);
-      return;
-    }
+  /**
+   * this image upload function is handle by our backend Server
+   */
 
-    // 1. Upload to Storage
-    const downloadUrl = await uploadPic(croppedFile, user.uid);
+  const uploadHandler = async () => {
+    if (croppedFile) {
+      try {
+        // 1. Manually create the FormData object
+        const formData = new FormData();
+        formData.append('image', croppedFile);
 
-    if (downloadUrl === "error") {
-      setIsLoading(false);
-      return; // Error toast is handled inside uploadPic
-    }
+        // 2. Call the Server Action with the constructed FormData
+        const response = await uploadImageAction(formData);
 
-    // 2. Update Auth Profile
-    try {
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, { photoURL: downloadUrl });
+        if (auth.currentUser) {
+          await updateProfile(auth.currentUser, { photoURL: response.url });
 
-        // Force-update local user state to show new pic immediately
-        // Note: onAuthStateChanged will also fire, but this is faster.
-        setUser({ ...auth.currentUser, photoURL: downloadUrl });
+          // Force-update local user state to show new pic immediately
+          // Note: onAuthStateChanged will also fire, but this is faster.
+          setUser({ ...auth.currentUser, photoURL: response.url || null });
 
-        toast.success("Image uploaded!");
+          toast.success("Image uploaded!");
 
-        // 3. Clean up
-        setCroppedFile(null);
-        setUrl(""); // The 'displayImageSrc' will now use user.photoURL
-        setImageSrc(null);
+          // 3. Clean up
+          setCroppedFile(null);
+          setUrl(""); // The 'displayImageSrc' will now use user.photoURL
+          setImageSrc(null);
+        }
+
+      } catch (error) {
+        toast.error("Upload process failed unexpectedly.");
       }
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-      toast.error("Failed to update profile.");
-    } finally {
-      setIsLoading(false);
+
     }
-  };
+  }
 
   // --- Render Logic ---
 
