@@ -10,4 +10,5 @@
 - ~~connect log out button with firebase auth in the header bar~~
 - ~~make load more button to fetch next 5 profile~~ (loadmore branch)
 - ~send resume data to server~
+- ~show server data on the resume edit page~
 - make setting page work by sending settings values to backend

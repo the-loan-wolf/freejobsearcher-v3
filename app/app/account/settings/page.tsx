@@ -21,13 +21,14 @@ import {
   SelectValue,
 } from "@/components/app-components/ui/select";
 import { Separator } from "@/components/app-components/ui/separator";
+import { FormEvent, useEffect, useState } from "react";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/app-components/ui/avatar";
-import { useEffect, useState } from "react";
-import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import {
   getAuth,
@@ -37,47 +38,64 @@ import {
 import { toast } from "sonner";
 import ProfilePicUpload from "@/components/app-components/ProfilePicUpload";
 
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 export default function SettingsPage() {
+  /* --- STATES --- */
   const [user, setUser] = useState<firebaseuser | null>(null);
   const [form, setForm] = useState({
     profile: {
-      name: "example",
-      role: "UI & UX Designer",
-      location: "Mumbai, India",
-      salary: "₹25,000",
-      image: "/ui-designer-headshot.png",
-      experience: "3+ years",
-      bio: "Passionate UI/UX designer",
+      name: "",
+      role: "",
+      location: "",
+      salary: "",
+      image: "",
+      experience: "",
+      bio: "",
     },
-    contact: {
-      phones: ["+91 98765 43210"],
-      emails: ["example@gmail.com"],
-    },
-    education: [
-      { degree: "Bachelor of Design", institution: "NID", year: "2020" },
-      { degree: "UX Certification", institution: "Google", year: "2021" },
-    ],
-    workHistory: [
-      {
-        company: "TechCorp",
-        position: "Senior UI Designer",
-        duration: "2022 - Present",
-      },
-      {
-        company: "StartupXYZ",
-        position: "UI/UX Designer",
-        duration: "2021 - 2022",
-      },
-    ],
-    achievements: [
-      "Led design for app with 100K+ downloads",
-      "Improved user engagement by 40%",
-      "Winner of Best Design Award 2023",
-    ],
-    skills: ["JavaScript", "node js", "php"],
+    contact: { phones: [""], emails: [""] },
+    education: [{ degree: "", institution: "", year: "" }],
+    workHistory: [{ company: "", position: "", duration: "" }],
+    achievements: [""],
+    skills: [""],
   });
 
-  const auth = getAuth(app);
+  /* --- EFFECTS --- */
+
+  // Listen for Firebase auth changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, [auth]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        try {
+          // User is guaranteed non-null here, so we can use user.uid
+          const docRef = doc(db, "resumes", user.uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            // Set the form state
+            setForm(docSnap.data() as typeof form);
+          } else {
+            // Document does not exist (e.g., new user)
+            console.log("No resume document found. Using default form state.");
+          }
+        } catch (error) {
+          // Log any errors that occurred during the process
+          console.error("Failed to fetch user resume data:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [user, db]);
+
+  /* --- HANDLERS --- */
 
   const updateProfile = (key: string, value: string) => {
     setForm((prev) => ({
@@ -237,28 +255,24 @@ export default function SettingsPage() {
     }));
   };
 
-  const handleSubmit = () => {
-    // console.log("Final form state:", form);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const db = getFirestore(app);
     if (user) {
       const docRef = doc(db, "resumes", user.uid);
       try {
-        setDoc(docRef, { ...form, createdAt: serverTimestamp() });
+        setDoc(
+          docRef,
+          { ...form, createdAt: serverTimestamp() },
+          { merge: true },
+        );
         toast.success("resumes saved successfully");
       } catch (error) {
         console.error("Error during saving resume:", error);
-        toast.error("Failed to sign out. Try again.");
+        toast.error("Failed to save resume. Try again.");
       }
     }
   };
-
-  // Listen for Firebase auth changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-    });
-    return unsubscribe;
-  }, [auth]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -285,335 +299,378 @@ export default function SettingsPage() {
 
           <div className="space-y-8">
             {/* Profile Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <User className="mr-2 h-5 w-5" />
-                  Profile Information
-                </CardTitle>
-                <CardDescription>
-                  Update your personal information and profile details
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <ProfilePicUpload />
+            <form onSubmit={handleSubmit}>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <User className="mr-2 h-5 w-5" />
+                    Profile Information
+                  </CardTitle>
+                  <CardDescription>
+                    Update your personal information and profile details
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <ProfilePicUpload setParentUrlState={updateProfile} />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">
+                        Name<span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="name"
+                        required
+                        value={form.profile.name}
+                        onChange={(e) => updateProfile("name", e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-x-2 space-y-2">
+                    {form.contact.phones.map((p, i) => (
+                      <div className="space-y-2" key={i}>
+                        {/* ADDED unique htmlFor/id */}
+                        <Label htmlFor={`phone-${i}`}>Phone #{i + 1}</Label>
+                        {/* ADDED  */}
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            id={`phone-${i}`}
+                            value={p}
+                            onChange={(e) =>
+                              updateContact("phones", i, e.target.value)
+                            }
+                            className="flex-grow"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removePhone(i)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2"
+                      onClick={addPhone}
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Phone
+                    </Button>
+
+                    {form.contact.emails.map((p, i) => (
+                      <div className="space-y-2" key={i}>
+                        {/* ADDED unique htmlFor/id */}
+                        <Label htmlFor={`email-${i}`}>Email #{i + 1}</Label>
+                        {/* ADDED  */}
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            id={`email-${i}`}
+                            type="email"
+                            value={p}
+                            onChange={(e) =>
+                              updateContact("emails", i, e.target.value)
+                            }
+                            className="flex-grow"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeEmail(i)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2"
+                      onClick={addEmail}
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Email
+                    </Button>
+                  </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="location">
+                      Location<span className="text-red-500">*</span>
+                    </Label>
                     <Input
-                      id="name"
-                      value={form.profile.name}
-                      onChange={(e) => updateProfile("name", e.target.value)}
+                      id="location"
+                      required
+                      value={form.profile.location}
+                      onChange={(e) =>
+                        updateProfile("location", e.target.value)
+                      }
                     />
                   </div>
-                </div>
 
-                {form.contact.phones.map((p, i) => (
-                  <div className="space-y-2" key={i}>
-                    {/* ADDED unique htmlFor/id */}
-                    <Label htmlFor={`phone-${i}`}>Phone #{i + 1}</Label>
-                    {/* ADDED  */}
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        id={`phone-${i}`}
-                        value={p}
-                        onChange={(e) =>
-                          updateContact("phones", i, e.target.value)
-                        }
-                        className="flex-grow"
-                      />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removePhone(i)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="title">
+                      Job Title<span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="title"
+                      required
+                      value={form.profile.role}
+                      onChange={(e) => updateProfile("role", e.target.value)}
+                    />
                   </div>
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-2"
-                  onClick={addPhone}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Phone
-                </Button>
 
-                {form.contact.emails.map((p, i) => (
-                  <div className="space-y-2" key={i}>
-                    {/* ADDED unique htmlFor/id */}
-                    <Label htmlFor={`email-${i}`}>Email #{i + 1}</Label>
-                    {/* ADDED  */}
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        id={`email-${i}`}
-                        type="email"
-                        value={p}
-                        onChange={(e) =>
-                          updateContact("emails", i, e.target.value)
-                        }
-                        className="flex-grow"
-                      />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeEmail(i)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="experience">
+                      experience<span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="experience"
+                      required
+                      value={form.profile.experience}
+                      onChange={(e) =>
+                        updateProfile("experience", e.target.value)
+                      }
+                    />
                   </div>
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-2"
-                  onClick={addEmail}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Email
-                </Button>
 
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input
-                    id="location"
-                    value={form.profile.location}
-                    onChange={(e) => updateProfile("location", e.target.value)}
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="salary">
+                      Salary(₹)<span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      required
+                      id="salary"
+                      value={form.profile.salary}
+                      onChange={(e) => updateProfile("salary", e.target.value)}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="title">Job Title</Label>
-                  <Input
-                    id="title"
-                    value={form.profile.role}
-                    onChange={(e) => updateProfile("role", e.target.value)}
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      rows={4}
+                      value={form.profile.bio}
+                      onChange={(e) => updateProfile("bio", e.target.value)}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="bio">Bio</Label>
-                  <Textarea
-                    id="bio"
-                    rows={4}
-                    value={form.profile.bio}
-                    onChange={(e) => updateProfile("bio", e.target.value)}
-                  />
-                </div>
-
-                {/* EDUCATION */}
-                <Card className="mt-8">
-                  <CardHeader>
-                    <CardTitle>Education</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {form.education.map((edu, i) => (
-                      <div key={i} className="flex items-start space-x-2">
-                        <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor={`degree-${i}`}>Degree</Label>
-                            <Input
-                              id={`degree-${i}`}
-                              value={edu.degree}
-                              onChange={(e) =>
-                                updateEducation(i, "degree", e.target.value)
-                              }
-                            />
+                  {/* EDUCATION */}
+                  <Card className="mt-8">
+                    <CardHeader>
+                      <CardTitle>Education</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {form.education.map((edu, i) => (
+                        <div key={i} className="flex items-start space-x-2">
+                          <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`degree-${i}`}>Degree</Label>
+                              <Input
+                                id={`degree-${i}`}
+                                value={edu.degree}
+                                onChange={(e) =>
+                                  updateEducation(i, "degree", e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`institution-${i}`}>
+                                Institution
+                              </Label>
+                              <Input
+                                id={`institution-${i}`}
+                                value={edu.institution}
+                                onChange={(e) =>
+                                  updateEducation(
+                                    i,
+                                    "institution",
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`year-${i}`}>Year</Label>
+                              <Input
+                                id={`year-${i}`}
+                                value={edu.year}
+                                onChange={(e) =>
+                                  updateEducation(i, "year", e.target.value)
+                                }
+                              />
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <Label htmlFor={`institution-${i}`}>
-                              Institution
-                            </Label>
-                            <Input
-                              id={`institution-${i}`}
-                              value={edu.institution}
-                              onChange={(e) =>
-                                updateEducation(
-                                  i,
-                                  "institution",
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor={`year-${i}`}>Year</Label>
-                            <Input
-                              id={`year-${i}`}
-                              value={edu.year}
-                              onChange={(e) =>
-                                updateEducation(i, "year", e.target.value)
-                              }
-                            />
-                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeEducation(i)}
+                            className="mt-6" // Align button roughly with inputs
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeEducation(i)}
-                          className="mt-6" // Align button roughly with inputs
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={addEducation}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Education
-                    </Button>
-                  </CardContent>
-                </Card>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={addEducation}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Education
+                      </Button>
+                    </CardContent>
+                  </Card>
 
-                {/* WORK */}
-                <Card className="mt-8">
-                  <CardHeader>
-                    <CardTitle>Work History</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {form.workHistory.map((job, i) => (
-                      <div key={i} className="flex items-start space-x-2">
-                        <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor={`company-${i}`}>Company</Label>
-                            <Input
-                              id={`company-${i}`}
-                              value={job.company}
-                              onChange={(e) =>
-                                updateWork(i, "company", e.target.value)
-                              }
-                            />
-                          </div>
+                  {/* WORK */}
+                  <Card className="mt-8">
+                    <CardHeader>
+                      <CardTitle>Work History</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {form.workHistory.map((job, i) => (
+                        <div key={i} className="flex items-start space-x-2">
+                          <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`company-${i}`}>Company</Label>
+                              <Input
+                                id={`company-${i}`}
+                                value={job.company}
+                                onChange={(e) =>
+                                  updateWork(i, "company", e.target.value)
+                                }
+                              />
+                            </div>
 
-                          <div className="space-y-2">
-                            <Label htmlFor={`position-${i}`}>Position</Label>
-                            <Input
-                              id={`position-${i}`}
-                              value={job.position}
-                              onChange={(e) =>
-                                updateWork(i, "position", e.target.value)
-                              }
-                            />
-                          </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`position-${i}`}>Position</Label>
+                              <Input
+                                id={`position-${i}`}
+                                value={job.position}
+                                onChange={(e) =>
+                                  updateWork(i, "position", e.target.value)
+                                }
+                              />
+                            </div>
 
-                          <div className="space-y-2">
-                            <Label htmlFor={`duration-${i}`}>Duration</Label>
-                            <Input
-                              id={`duration-${i}`}
-                              value={job.duration}
-                              onChange={(e) =>
-                                updateWork(i, "duration", e.target.value)
-                              }
-                            />
+                            <div className="space-y-2">
+                              <Label htmlFor={`duration-${i}`}>Duration</Label>
+                              <Input
+                                id={`duration-${i}`}
+                                value={job.duration}
+                                onChange={(e) =>
+                                  updateWork(i, "duration", e.target.value)
+                                }
+                              />
+                            </div>
                           </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeWork(i)}
+                            className="mt-6" // Align button roughly with inputs
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeWork(i)}
-                          className="mt-6" // Align button roughly with inputs
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={addWork}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Work History
-                    </Button>
-                  </CardContent>
-                </Card>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={addWork}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Work History
+                      </Button>
+                    </CardContent>
+                  </Card>
 
-                {/* ACHIEVEMENTS */}
-                <Card className="mt-8">
-                  <CardHeader>
-                    <CardTitle>Achievements</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {form.achievements.map((a, i) => (
-                      <div key={i} className="flex items-center space-x-2">
-                        <Input
-                          value={a}
-                          onChange={(e) =>
-                            updateAchievements(i, e.target.value)
-                          }
-                          className="flex-grow"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeAchievement(i)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={addAchievement}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Achievement
-                    </Button>
-                  </CardContent>
-                </Card>
+                  {/* ACHIEVEMENTS */}
+                  <Card className="mt-8">
+                    <CardHeader>
+                      <CardTitle>Achievements</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {form.achievements.map((a, i) => (
+                        <div key={i} className="flex items-center space-x-2">
+                          <Input
+                            value={a}
+                            onChange={(e) =>
+                              updateAchievements(i, e.target.value)
+                            }
+                            className="flex-grow"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeAchievement(i)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={addAchievement}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Achievement
+                      </Button>
+                    </CardContent>
+                  </Card>
 
-                {/* SKILLS */}
-                <Card className="mt-8">
-                  <CardHeader>
-                    <CardTitle>Skills</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {form.skills.map((s, i) => (
-                      <div key={i} className="flex items-center space-x-2">
-                        <Input
-                          value={s}
-                          onChange={(e) => updateSkills(i, e.target.value)}
-                          className="flex-grow"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeSkill(i)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      onClick={addSkill}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Skill
+                  {/* SKILLS */}
+                  <Card className="mt-8">
+                    <CardHeader>
+                      <CardTitle>Skills</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {form.skills.map((s, i) => (
+                        <div key={i} className="flex items-center space-x-2">
+                          <Input
+                            value={s}
+                            required
+                            onChange={(e) => updateSkills(i, e.target.value)}
+                            className="flex-grow"
+                          />
+                          <span className="text-red-500">*</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeSkill(i)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={addSkill}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Skill
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  <div className="mt-8">
+                    <Button size="lg" type="submit">
+                      Save Changes
                     </Button>
-                  </CardContent>
-                </Card>
-                <div className="mt-8">
-                  <Button size="lg" onClick={handleSubmit}>
-                    Save Changes
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                </CardContent>
+              </Card>
+            </form>
 
             {/* Notification Settings */}
             <Card>
