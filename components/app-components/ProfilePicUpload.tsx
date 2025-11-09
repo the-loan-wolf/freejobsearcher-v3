@@ -16,7 +16,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { uploadImageAction } from "@/app/app/action";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 
 const storage = getStorage(app);
 const auth = getAuth();
@@ -49,7 +49,7 @@ const uploadPic = async (picFile: File, userId: string): Promise<string> => {
   }
 };
 
-export default function ProfilePicUpload() {
+export default function ProfilePicUpload({ setParentUrlState }: { setParentUrlState: (key: string, value: string) => void }) {
   // The original image file (as a data URL) to be sent to the cropper
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
@@ -207,7 +207,32 @@ export default function ProfilePicUpload() {
 
           // Also set firstore profile pic field
           const docRef = doc(db, "resumes", user?.uid);
-          await updateDoc(docRef, { "profile.image": response.url });
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            // Document exists, so we update it
+            await updateDoc(docRef, { "profile.image": response.url });
+          } else {
+            // Document does not exist, so we create it
+            await setDoc(docRef, {
+              profile: {
+                name: "",
+                role: "",
+                location: "",
+                salary: "",
+                image: response.url,
+                experience: "",
+                bio: "",
+              },
+              contact: { phones: [""], emails: [""] },
+              education: [{ degree: "", institution: "", year: "" }],
+              workHistory: [{ company: "", position: "", duration: "" }],
+              achievements: [""],
+              skills: [""],
+            }, { merge: true });
+          }
+
+          // update the parent state
+          setParentUrlState("image", response.url || "");
 
           toast.success("Image uploaded!");
 
