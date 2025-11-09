@@ -16,9 +16,11 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { uploadImageAction } from "@/app/app/action";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const storage = getStorage(app);
 const auth = getAuth();
+const db = getFirestore(app);
 
 /**
  * Uploads a file to Firebase Storage under a user-specific path.
@@ -186,6 +188,7 @@ export default function ProfilePicUpload() {
    */
 
   const uploadHandler = async () => {
+    setIsLoading(true);
     if (croppedFile) {
       try {
         // 1. Manually create the FormData object
@@ -195,12 +198,16 @@ export default function ProfilePicUpload() {
         // 2. Call the Server Action with the constructed FormData
         const response = await uploadImageAction(formData);
 
-        if (auth.currentUser) {
-          await updateProfile(auth.currentUser, { photoURL: response.url });
+        if (user) {
+          await updateProfile(user, { photoURL: response.url });
 
           // Force-update local user state to show new pic immediately
           // Note: onAuthStateChanged will also fire, but this is faster.
-          setUser({ ...auth.currentUser, photoURL: response.url || null });
+          setUser({ ...user, photoURL: response.url || null });
+
+          // Also set firstore profile pic field
+          const docRef = doc(db, "resumes", user?.uid);
+          await updateDoc(docRef, { "profile.image": response.url });
 
           toast.success("Image uploaded!");
 
@@ -208,10 +215,13 @@ export default function ProfilePicUpload() {
           setCroppedFile(null);
           setUrl(""); // The 'displayImageSrc' will now use user.photoURL
           setImageSrc(null);
+          setIsLoading(false);
         }
 
       } catch (error) {
         toast.error("Upload process failed unexpectedly.");
+        console.log("image upload: ", error)
+        setIsLoading(false);
       }
 
     }
