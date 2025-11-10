@@ -135,12 +135,13 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
         )
       ) : (
         <div className="flex justify-center">
-          <Link
-            href={"/app/signin"}
-            className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90"
-          >
-            Sign In to see more
-          </Link>
+          <Button asChild>
+            <Link
+              href={"/app/signin"}
+            >
+              Sign In to see more
+            </Link>
+          </Button>
         </div>
       )}
     </div>

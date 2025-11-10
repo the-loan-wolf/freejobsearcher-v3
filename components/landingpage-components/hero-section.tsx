@@ -39,10 +39,10 @@ export function HeroSection() {
             style={{ animationDelay: "0.2s" }}
           >
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
-              Join thousands of professionals who&apos;ve accelerated their careers
-              with our AI-powered job matching platform. Create your profile
-              today and get matched with opportunities that fit your skills
-              perfectly.
+              Join thousands of professionals who&apos;ve accelerated their
+              careers with our AI-powered job matching platform. Create your
+              profile today and get matched with opportunities that fit your
+              skills perfectly.
             </p>
           </div>
 
@@ -50,21 +50,22 @@ export function HeroSection() {
             className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center mb-12"
             style={{ animationDelay: "0.4s" }}
           >
-            <Link href="/app/signup" prefetch={true}>
-              <Button size="lg" className="text-lg px-8 py-6 group">
+            <Button size="lg" className="text-lg px-8 py-6 group" asChild>
+              <Link href="/app/signup" prefetch={true}>
                 Create Your Profile
                 <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link href="/app" prefetch={true}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-lg px-8 py-6 glass-card bg-transparent"
-              >
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="text-lg px-8 py-6 glass-card bg-transparent"
+              asChild
+            >
+              <Link href="/app" prefetch={true}>
                 Browse Jobs
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
 
           <div

@@ -52,14 +52,16 @@ export function Navigation() {
               >
                 About
               </a>
-              <Link href="/app/signin" prefetch={true}>
-                <Button variant="outline" className="mr-2 bg-transparent">
+              <Button variant="outline" className="mr-2 bg-transparent" asChild>
+                <Link href="/app/signin" prefetch={true}>
                   Sign In
-                </Button>
-              </Link>
-              <Link href="/app/signup" prefetch={true}>
-                <Button>Get Started</Button>
-              </Link>
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/app/signup" prefetch={true}>
+                  Get Started
+                </Link>
+              </Button>
             </div>
           </div>
 
@@ -100,16 +102,22 @@ export function Navigation() {
                 About
               </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                <Link href="/app/signin" className="w-full">
-                  <Button id="signin-btn" variant="outline" size="sm" className="w-full">
+                <Button
+                  id="signin-btn"
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  asChild
+                >
+                  <Link href="/app/signin" className="w-full">
                     Sign In
-                  </Button>
-                </Link>
-                <Link href="/app/signup" className="w-full">
-                  <Button id="signup-btn" size="sm" className="w-full">
+                  </Link>
+                </Button>
+                <Button id="signup-btn" size="sm" className="w-full" asChild>
+                  <Link href="/app/signup" className="w-full">
                     Get Started
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>

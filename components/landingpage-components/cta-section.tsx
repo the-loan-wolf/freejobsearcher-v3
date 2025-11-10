@@ -28,8 +28,8 @@ export function CTASection() {
 
           <p className="text-xl text-muted-foreground mb-8 text-pretty">
             Join over 100,000 professionals who&apos;ve found their dream jobs
-            through FreeJobSearcher. Start your journey today - it&apos;s completely
-            free to get started.
+            through FreeJobSearcher. Start your journey today - it&apos;s
+            completely free to get started.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left">
@@ -42,12 +42,12 @@ export function CTASection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/app/signup" prefetch={true}>
-              <Button size="lg" className="text-lg px-8 py-6 group">
+            <Button size="lg" className="text-lg px-8 py-6 group" asChild>
+              <Link href="/app/signup" prefetch={true}>
                 Create Free Account
                 <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <Button
               variant="outline"
               size="lg"
