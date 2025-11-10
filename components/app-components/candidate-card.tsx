@@ -2,7 +2,11 @@ import { MapPin, Clock, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/app-components/ui/card";
 import { Button } from "@/components/app-components/ui/button";
 import { Badge } from "@/components/app-components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/app-components/ui/avatar";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/app-components/ui/avatar";
 import Link from "next/link";
 
 interface Candidate {
@@ -25,10 +29,7 @@ export function CandidateGridSkeleton() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
-          <Card
-            key={i}
-            className="group border-primary/10 p-6 animate-pulse"
-          >
+          <Card key={i} className="group border-primary/10 p-6 animate-pulse">
             <CardContent className="p-0 flex flex-col items-center text-center space-y-4">
               {/* Avatar */}
               <div className="h-20 w-20 rounded-full bg-muted ring-2 ring-primary/10" />
@@ -48,10 +49,7 @@ export function CandidateGridSkeleton() {
               {/* Skills */}
               <div className="flex flex-wrap justify-center gap-2 mt-2">
                 {[...Array(3)].map((_, j) => (
-                  <div
-                    key={j}
-                    className="h-5 w-16 bg-muted rounded-full"
-                  />
+                  <div key={j} className="h-5 w-16 bg-muted rounded-full" />
                 ))}
               </div>
 
@@ -74,7 +72,7 @@ export function CandidateGridSkeleton() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export function CandidateCard({ candidate }: CandidateCardProps) {
@@ -137,13 +135,19 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
             </div>
 
             <div className="flex gap-2">
-              <Link
-                href={`/app/profile/${candidate.id}`}
-                target="_blank"
-                className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 w-[85%] transition-all duration-300 shadow-lg hover:shadow-primary/20"
+              <Button
+                className="transition-all duration-300 shadow-lg hover:shadow-primary/20"
+                size="sm"
+                asChild
               >
-                View Profile
-              </Link>
+                <Link
+                  href={`/app/profile/${candidate.id}`}
+                  target="_blank"
+                  className="w-[85%]"
+                >
+                  View Profile
+                </Link>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
