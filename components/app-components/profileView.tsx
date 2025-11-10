@@ -1,0 +1,194 @@
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { Separator } from "./ui/separator";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+  Award,
+} from "lucide-react";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Dispatch, SetStateAction } from "react";
+import { ResumeType } from "@/lib/types";
+
+export default function ProfileView({
+  setView,
+  user,
+}: {
+  setView: Dispatch<SetStateAction<boolean>>;
+  user: ResumeType;
+}) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Profile Sidebar */}
+      <div className="lg:col-span-1">
+        <Card className="sticky top-24">
+          <CardContent className="p-6">
+            <div className="text-center mb-6">
+              <Avatar className="h-24 w-24 mx-auto mb-4">
+                <AvatarImage
+                  src={user.profile.image || "/placeholder.svg"}
+                  alt={user.profile.name}
+                />
+                <AvatarFallback className="text-lg">
+                  {user.profile.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <h1 className="text-2xl font-bold text-foreground mb-1">
+                {user.profile.name}
+              </h1>
+              {/* <p className="text-primary font-medium mb-2">{user.profile.title}</p> */}
+              {/* <p className="text-muted-foreground text-sm">{user.profile.company}</p> */}
+            </div>
+
+            <Separator className="my-6" />
+
+            <div className="space-y-4">
+              {/* <div className="flex items-center text-sm"> */}
+              {/*   <Mail className="h-4 w-4 text-muted-foreground mr-3" /> */}
+              {/*   <span className="text-foreground">{user.email}</span> */}
+              {/* </div> */}
+              {user.contact?.emails?.map((email: any, i: number) => (
+                <div key={`phone-${i}`} className="flex items-center text-sm">
+                  <Mail className="h-4 w-4 text-muted-foreground mr-3" />
+                  <span className="text-foreground">{email}</span>
+                </div>
+              ))}
+              {/* <div className="flex items-center text-sm"> */}
+              {/*   <Phone className="h-4 w-4 text-muted-foreground mr-3" /> */}
+              {/*   <span className="text-foreground">{user.phone}</span> */}
+              {/* </div> */}
+              {user.contact?.phones?.map((phone: any, i: number) => (
+                <div key={`phone-${i}`} className="flex items-center text-sm">
+                  <Phone className="h-4 w-4 text-muted-foreground mr-3" />
+                  <span className="text-foreground">{phone}</span>
+                </div>
+              ))}
+              <div className="flex items-center text-sm">
+                <MapPin className="h-4 w-4 text-muted-foreground mr-3" />
+                <span className="text-foreground">{user.profile.location}</span>
+              </div>
+              {/* <div className="flex items-center text-sm"> */}
+              {/*   <Calendar className="h-4 w-4 text-muted-foreground mr-3" /> */}
+              {/*   <span className="text-foreground">Joined {user.joinDate}</span> */}
+              {/* </div> */}
+            </div>
+
+            <Separator className="my-6" />
+
+            <Button className="w-full" onClick={() => setView(false)}>
+              Edit profile
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content */}
+      <div className="lg:col-span-2 space-y-8">
+        {/* About Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Briefcase className="mr-2 h-5 w-5" />
+              About
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-foreground leading-relaxed">
+              {user.profile.bio}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Skills Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Skills</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {user.skills.map((skill) => (
+                <Badge
+                  key={skill}
+                  variant="secondary"
+                  className="bg-primary/10 text-primary hover:bg-primary/20"
+                >
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Experience Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Briefcase className="mr-2 h-5 w-5" />
+              Work Experience
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {user.workHistory.map((exp, index) => (
+              <div key={index} className="border-l-2 border-primary/20 pl-4">
+                <h3 className="font-semibold text-foreground">
+                  {exp.position}
+                </h3>
+                <p className="text-primary font-medium">{exp.company}</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  {exp.duration}
+                </p>
+                {/* <p className="text-foreground">{exp.description}</p> */}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Education Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <GraduationCap className="mr-2 h-5 w-5" />
+              Education
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {user.education.map((edu, index) => (
+              <div key={index}>
+                <h3 className="font-semibold text-foreground">{edu.degree}</h3>
+                <p className="text-primary font-medium">{edu.institution}</p>
+                <p className="text-sm text-muted-foreground">{edu.year}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Achievements Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Award className="mr-2 h-5 w-5" />
+              Achievements
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {user.achievements.map((achievement, index) => (
+                <li key={index} className="flex items-start">
+                  <div className="h-2 w-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0" />
+                  <span className="text-foreground">{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
