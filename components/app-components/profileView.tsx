@@ -7,6 +7,8 @@ import {
   Briefcase,
   GraduationCap,
   Award,
+  Hammer,
+  Calendar,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -43,27 +45,23 @@ export default function ProfileView({
               <h1 className="text-2xl font-bold text-foreground mb-1">
                 {user.profile.name}
               </h1>
-              {/* <p className="text-primary font-medium mb-2">{user.profile.title}</p> */}
-              {/* <p className="text-muted-foreground text-sm">{user.profile.company}</p> */}
+              <p className="text-primary font-medium mb-2">
+                {user.workHistory[0].position}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {user.workHistory[0].company}
+              </p>
             </div>
 
             <Separator className="my-6" />
 
             <div className="space-y-4">
-              {/* <div className="flex items-center text-sm"> */}
-              {/*   <Mail className="h-4 w-4 text-muted-foreground mr-3" /> */}
-              {/*   <span className="text-foreground">{user.email}</span> */}
-              {/* </div> */}
               {user.contact?.emails?.map((email: any, i: number) => (
                 <div key={`phone-${i}`} className="flex items-center text-sm">
                   <Mail className="h-4 w-4 text-muted-foreground mr-3" />
                   <span className="text-foreground">{email}</span>
                 </div>
               ))}
-              {/* <div className="flex items-center text-sm"> */}
-              {/*   <Phone className="h-4 w-4 text-muted-foreground mr-3" /> */}
-              {/*   <span className="text-foreground">{user.phone}</span> */}
-              {/* </div> */}
               {user.contact?.phones?.map((phone: any, i: number) => (
                 <div key={`phone-${i}`} className="flex items-center text-sm">
                   <Phone className="h-4 w-4 text-muted-foreground mr-3" />
@@ -74,10 +72,12 @@ export default function ProfileView({
                 <MapPin className="h-4 w-4 text-muted-foreground mr-3" />
                 <span className="text-foreground">{user.profile.location}</span>
               </div>
-              {/* <div className="flex items-center text-sm"> */}
-              {/*   <Calendar className="h-4 w-4 text-muted-foreground mr-3" /> */}
-              {/*   <span className="text-foreground">Joined {user.joinDate}</span> */}
-              {/* </div> */}
+              <div className="flex items-center text-sm">
+                <Calendar className="h-4 w-4 text-muted-foreground mr-3" />
+                <span className="text-foreground">
+                  Joined {user.workHistory[0].duration}
+                </span>
+              </div>
             </div>
 
             <Separator className="my-6" />
@@ -109,7 +109,10 @@ export default function ProfileView({
         {/* Skills Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Skills</CardTitle>
+            <CardTitle className="flex items-center">
+              <Hammer className="mr-2 h-5 w-5" />
+              Skills
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">

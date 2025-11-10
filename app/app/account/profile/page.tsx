@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/app-components/ui/button"
-import { useEffect, useState } from "react"
-import ProfileEdit from "@/components/app-components/profileEdit"
-import ProfileView from "@/components/app-components/profileView"
-import { getAuth, onAuthStateChanged, User } from "firebase/auth"
-import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/app-components/ui/button";
+import { useEffect, useState } from "react";
+import ProfileEdit from "@/components/app-components/profileEdit";
+import ProfileView from "@/components/app-components/profileView";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 
 const db = getFirestore(app);
@@ -79,13 +79,19 @@ export default function UserProfilePage() {
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Home
             </Link>
-          ) : (<Button variant="ghost" onClick={() => setView(true)}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-          </Button>)}
+          ) : (
+            <Button variant="ghost" onClick={() => setView(true)}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+            </Button>
+          )}
 
-          {view ? <ProfileView setView={setView} user={form} /> : <ProfileEdit form={form} setForm={setForm} user={user} />}
+          {view ? (
+            <ProfileView setView={setView} user={form} />
+          ) : (
+            <ProfileEdit form={form} setForm={setForm} user={user} />
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
