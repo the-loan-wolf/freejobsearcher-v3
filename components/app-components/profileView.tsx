@@ -22,7 +22,7 @@ export default function ProfileView({
   user: ResumeType;
 }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
       {/* Profile Sidebar */}
       <div className="lg:col-span-1">
         <Card className="sticky top-24">
