@@ -108,7 +108,7 @@ export function Header({ onSearch }: HeaderProps) {
 
           <div className="flex items-center space-x-4">
             <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2  h-4 w-4" />
               <Input
                 placeholder="Search candidates..."
                 className="pl-10 w-64 glass border-primary/20 focus:border-primary/40 focus:ring-primary/20"
@@ -116,55 +116,68 @@ export function Header({ onSearch }: HeaderProps) {
               />
             </div>
 
-            {user ? (<DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center space-x-2 bg-primary/10 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center space-x-2 bg-primary/10 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+                  >
+                    <Avatar className="h-6 w-6 ring-2 ring-primary/20">
+                      <AvatarImage
+                        src={user.photoURL || "/placeholder-user.jpg"}
+                        alt="User"
+                      />
+                      <AvatarFallback className="bg-primary/20 text-primary">
+                        {user.displayName}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:inline">{user.displayName}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 glass-strong border-primary/20"
                 >
-                  <Avatar className="h-6 w-6 ring-2 ring-primary/20">
-                    <AvatarImage src={user.photoURL || "/placeholder-user.jpg"} alt="User" />
-                    <AvatarFallback className="bg-primary/20 text-primary">
-                      {user.displayName}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="hidden sm:inline">{user.displayName}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 glass-strong border-primary/20"
-              >
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/app/account/profile"
-                    className="flex items-center"
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/app/account/profile"
+                      className="flex items-center"
+                    >
+                      <UserCircle className="mr-2 h-4 w-4" />
+                      <span>View Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/app/account/settings"
+                      className="flex items-center"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={handleLogout}
+                    className="text-red-600"
                   >
-                    <UserCircle className="mr-2 h-4 w-4" />
-                    <span>View Profile</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/app/account/settings"
-                    className="flex items-center"
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={handleLogout} className="text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>)
-              : (<Button asChild><Link href="/app/signin">Sign In</Link></Button>)
-            }
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild>
+                <Link href="/app/signin">
+                  <UserCircle className="h-4 w-4" />
+                  Sign In
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
