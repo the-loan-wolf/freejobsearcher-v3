@@ -80,14 +80,16 @@ export function CandidateGridSkeleton() {
 }
 
 export function CandidateCard({ candidate, user }: CandidateCardProps) {
-
   // --- STATES --- //
   const [condition, setCondition] = useState("none");
 
   // --- HANDLERS --- //
   const favoriteButtonHandler = () => {
-    if (!user) toast.warning("Need to Sign In first");
-    setCondition((prev) => (prev === "none" ? "yellow" : "none"));
+    if (!user) {
+      toast.warning("Need to Sign In first");
+    } else {
+      setCondition((prev) => (prev === "none" ? "yellow" : "none"));
+    }
   };
 
   return (
