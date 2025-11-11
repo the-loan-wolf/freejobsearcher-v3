@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import {
   MapPin,
@@ -12,6 +12,7 @@ import {
   Award,
   Briefcase,
   GraduationCap,
+  CircleUserRound,
 } from "lucide-react";
 import { Button } from "@/components/app-components/ui/button";
 import {
@@ -30,7 +31,9 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 async function fetchFeed(uid: string) {
@@ -51,7 +54,7 @@ async function fetchFeed(uid: string) {
       // Log any errors that occurred during the process
       console.error("Failed to fetch user resume data:", error);
     }
-  };
+  }
 }
 
 interface ProfilePageProps {
@@ -110,6 +113,15 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const { id } = use(params);
   const candidateId = id;
   if (!candidateId) notFound();
+  const [user, setUser] = useState<User | null>(null);
+
+  // Listen for Firebase auth changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, [auth]);
 
   const {
     data: candidate,
@@ -233,18 +245,40 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {candidate.contact?.phones?.map((phone: any, i: number) => (
-                  <div key={`phone-${i}`} className="flex items-center gap-3">
+                {user ? (
+                  candidate.contact?.phones?.map((phone: any, i: number) => (
+                    <div key={`phone-${i}`} className="flex items-center gap-3">
+                      <Phone className="h-5 w-5 text-primary" />
+                      <span>{phone}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-primary" />
-                    <span>{phone}</span>
+                    <span>##########</span>
+                    <Badge variant="destructive">
+                      <CircleUserRound />
+                      SignIn to see
+                    </Badge>
                   </div>
-                ))}
-                {candidate.contact?.emails?.map((email: any, i: number) => (
-                  <div key={`email-${i}`} className="flex items-center gap-3">
+                )}
+                {user ? (
+                  candidate.contact?.emails?.map((email: any, i: number) => (
+                    <div key={`email-${i}`} className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-primary" />
+                      <span>{email}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-primary" />
-                    <span>{email}</span>
+                    <span>##########</span>
+                    <Badge variant="destructive">
+                      <CircleUserRound />
+                      SignIn to see
+                    </Badge>
                   </div>
-                ))}
+                )}
                 <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <span>
@@ -344,7 +378,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                           {achievement}
                         </span>
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </CardContent>
