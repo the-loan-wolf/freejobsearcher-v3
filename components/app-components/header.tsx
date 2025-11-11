@@ -108,7 +108,7 @@ export function Header({ onSearch }: HeaderProps) {
 
           <div className="flex items-center space-x-4">
             <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2  h-4 w-4" />
+              <Search className="absolute z-10 left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
               <Input
                 placeholder="Search candidates..."
                 className="pl-10 w-64 glass border-primary/20 focus:border-primary/40 focus:ring-primary/20"
