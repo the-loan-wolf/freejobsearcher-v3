@@ -9,6 +9,7 @@ import ProfileView from "@/components/app-components/profileView";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
+import { ResumeType } from "@/lib/types";
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -16,7 +17,7 @@ const auth = getAuth(app);
 export default function UserProfilePage() {
   const [view, setView] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ResumeType>({
     profile: {
       name: "",
       role: "",
@@ -31,6 +32,7 @@ export default function UserProfilePage() {
     workHistory: [{ company: "", position: "", duration: "" }],
     achievements: [""],
     skills: [""],
+    createdAt: null,
   });
 
   /* --- EFFECTS --- */

@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type ResumeType = {
   profile: {
     name: string;
@@ -24,4 +26,5 @@ export type ResumeType = {
   }[];
   achievements: string[];
   skills: string[];
+  createdAt: Timestamp | null;
 }
