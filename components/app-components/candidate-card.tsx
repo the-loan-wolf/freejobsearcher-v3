@@ -146,7 +146,7 @@ export function CandidateCard({ candidate, user }: CandidateCardProps) {
                 Expected Salary
               </span>
               <span className="font-bold text-lg text-primary group-hover:text-accent group-hover:drop-shadow-sm transition-all duration-300">
-                {candidate.salary}
+                ₹{candidate.salary}
               </span>
             </div>
 

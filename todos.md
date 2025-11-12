@@ -15,7 +15,7 @@
 - make auth context provider and replace all the redundant auth logic from each routes and component with it.
 - ~make new private collections for favorite, contacts & settings in firestore~
 - ~bug: clicking on add phone & email button also trigger toast containing "resume saved successfully"~
-- remove rupees symbol from DB and add to the frontend JSX
+- ~remove rupees symbol from DB and add to the frontend JSX~
 - add animation on button being pressed
 - add youtube video element
 - add contact timing
