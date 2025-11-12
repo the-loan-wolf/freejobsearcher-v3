@@ -10,13 +10,14 @@ import {
 import { Input } from "@/components/app-components/ui/input";
 import { Label } from "@/components/app-components/ui/label";
 import { Textarea } from "@/components/app-components/ui/textarea";
-import { Dispatch, FormEvent, SetStateAction } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import { User as firebaseuser } from "firebase/auth";
 import { toast } from "sonner";
 import ProfilePicUpload from "@/components/app-components/ProfilePicUpload";
 import { ResumeType } from "@/lib/types";
+import VideoIntro from "./VideoIntro";
 
 export default function ProfileEdit({
   form,
@@ -27,6 +28,10 @@ export default function ProfileEdit({
   setForm: Dispatch<SetStateAction<ResumeType>>;
   user: firebaseuser | null;
 }) {
+  /* --- STATES --- */
+
+  const [videoExist, setVideoExist] = useState(false);
+
   /* --- HANDLERS --- */
 
   const updateProfile = (key: string, value: string) => {
@@ -187,15 +192,28 @@ export default function ProfileEdit({
     }));
   };
 
+  const addLink = (vid: string) => {
+    setForm((prev) => ({ ...prev, ytVid: vid }));
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const db = getFirestore(app);
+    if (!videoExist) {
+      setForm((prev) => ({ ...prev, ytVid: "" })); // this will reset the state in the next run
+    }
     if (user) {
       const docRef = doc(db, "resumes", user.uid);
       try {
         setDoc(
           docRef,
-          { ...form, createdAt: serverTimestamp() },
+          {
+            ...form,
+            createdAt: serverTimestamp(),
+            ytVid: videoExist
+              ? videoExist
+              : "" /* we are directly providing value here because state update will take time(state is going to update in next run) and right now we will get old value */,
+          },
           { merge: true },
         );
         toast.success("resumes saved successfully");
@@ -210,7 +228,6 @@ export default function ProfileEdit({
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <div className="max-w-4xl mx-auto">
-
           <div className="space-y-8">
             {/* Profile Settings */}
             <form onSubmit={handleSubmit}>
@@ -377,6 +394,13 @@ export default function ProfileEdit({
                       onChange={(e) => updateProfile("bio", e.target.value)}
                     />
                   </div>
+
+                  <VideoIntro
+                    vid={form.ytVid}
+                    setVid={addLink}
+                    verified={videoExist}
+                    setVerified={setVideoExist}
+                  />
 
                   {/* EDUCATION */}
                   <Card className="mt-8">

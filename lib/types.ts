@@ -27,4 +27,5 @@ export type ResumeType = {
   achievements: string[];
   skills: string[];
   createdAt: Timestamp | null;
-}
+  ytVid: string;
+};

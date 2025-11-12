@@ -33,6 +33,7 @@ export default function UserProfilePage() {
     achievements: [""],
     skills: [""],
     createdAt: null,
+    ytVid: "",
   });
 
   /* --- EFFECTS --- */

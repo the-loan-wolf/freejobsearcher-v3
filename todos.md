@@ -20,3 +20,4 @@
 - add youtube video element
 - add contact timing
 - add fresher option for candidate with no experience
+- make favorite button actually work(connect to the backend)
