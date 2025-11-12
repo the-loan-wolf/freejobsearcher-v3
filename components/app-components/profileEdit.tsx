@@ -257,6 +257,7 @@ export default function ProfileEdit({
                             className="flex-grow"
                           />
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removePhone(i)}
@@ -267,6 +268,7 @@ export default function ProfileEdit({
                       </div>
                     ))}
                     <Button
+                      type="button"
                       variant="outline"
                       size="sm"
                       className="mt-2"
@@ -292,6 +294,7 @@ export default function ProfileEdit({
                             className="flex-grow"
                           />
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeEmail(i)}
@@ -302,6 +305,7 @@ export default function ProfileEdit({
                       </div>
                     ))}
                     <Button
+                      type="button"
                       variant="outline"
                       size="sm"
                       className="mt-2"
@@ -421,6 +425,7 @@ export default function ProfileEdit({
                             </div>
                           </div>
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeEducation(i)}
@@ -431,6 +436,7 @@ export default function ProfileEdit({
                         </div>
                       ))}
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         className="mt-4"
@@ -485,6 +491,7 @@ export default function ProfileEdit({
                             </div>
                           </div>
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeWork(i)}
@@ -495,6 +502,7 @@ export default function ProfileEdit({
                         </div>
                       ))}
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         className="mt-4"
@@ -522,6 +530,7 @@ export default function ProfileEdit({
                             className="flex-grow"
                           />
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeAchievement(i)}
@@ -531,6 +540,7 @@ export default function ProfileEdit({
                         </div>
                       ))}
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         className="mt-4"
@@ -558,6 +568,7 @@ export default function ProfileEdit({
                           />
                           <span className="text-red-500">*</span>
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeSkill(i)}
@@ -567,6 +578,7 @@ export default function ProfileEdit({
                         </div>
                       ))}
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         className="mt-4"
