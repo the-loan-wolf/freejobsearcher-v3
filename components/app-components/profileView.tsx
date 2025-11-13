@@ -32,6 +32,13 @@ export default function ProfileView({
     userdate = jsDate.toLocaleDateString();
   }
 
+  let ytVideoID: string | null = "";
+
+  if (user.ytVid) {
+    const url = new URL(user.ytVid).searchParams;
+    ytVideoID = url.get("v");
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
       {/* Profile Sidebar */}
@@ -112,6 +119,30 @@ export default function ProfileView({
             </p>
           </CardContent>
         </Card>
+
+        {ytVideoID && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Briefcase className="mr-2 h-5 w-5" />
+                Video
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <iframe
+                allowFullScreen={true}
+                // className="border-0 mt-2"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                // title="Getting started | Video viewing basics"
+                // width="400"
+                // height="230"
+                src={`https://www.youtube.com/embed/${ytVideoID}?autoplay=0&amp;cc_lang_pref=en&amp;cc_load_policy=1&amp;controls=2&amp;rel=0&amp;hl=en&amp;enablejsapi=1&amp;widgetid=1&vf=6`}
+                id="widget2"
+              ></iframe>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Skills Section */}
         <Card>

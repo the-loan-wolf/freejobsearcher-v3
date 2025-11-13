@@ -56,7 +56,7 @@ export default function UserProfilePage() {
 
           if (docSnap.exists()) {
             // Set the form state
-            setForm(docSnap.data() as typeof form);
+            setForm(docSnap.data() as ResumeType);
           } else {
             // Document does not exist (e.g., new user)
             console.log("No resume document found. Using default form state.");
