@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import { notFound } from "next/navigation";
 import {
   MapPin,
@@ -31,10 +31,9 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
-const auth = getAuth(app);
 const db = getFirestore(app);
 
 async function fetchFeed(uid: string) {
@@ -116,7 +115,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   if (!candidateId) notFound();
 
   // --- STATES --- //
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const [condition, setCondition] = useState("none");
 
   // --- HANDLERS --- //
@@ -127,14 +126,6 @@ export default function ProfilePage({ params }: ProfilePageProps) {
       setCondition((prev) => (prev === "none" ? "yellow" : "none"));
     }
   };
-
-  // Listen for Firebase auth changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-    });
-    return unsubscribe;
-  }, [auth]);
 
   const {
     data: candidate,

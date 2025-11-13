@@ -20,26 +20,18 @@ import {
   AvatarImage,
 } from "@/components/app-components/ui/avatar";
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/lib/firebaseLib";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
 export function Header({ onSearch }: HeaderProps) {
-  const auth = getAuth(app);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
-  // Listen for Firebase auth changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-    });
-    return unsubscribe;
-  }, [auth]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,12 +50,6 @@ export function Header({ onSearch }: HeaderProps) {
       const auth = getAuth(app);
       await signOut(auth);
       toast.success("Signed out successfully!");
-      // Optional: clear local storage if you stored anything
-      // localStorage.removeItem("loggedInUser");
-      // localStorage.removeItem("displayName");
-      // localStorage.removeItem("photoURL");
-      // Redirect after a short delay (for toast to show)
-      // setTimeout(() => router.push("/signin"), 300);
     } catch (error) {
       console.error("Error during sign out:", error);
       toast.error("Failed to sign out. Try again.");
@@ -72,8 +58,9 @@ export function Header({ onSearch }: HeaderProps) {
 
   return (
     <header
-      className={`sticky top-0 z-5 transition-all duration-300 ${isScrolled ? "glass-card" : "bg-transparent"
-        }`}
+      className={`sticky top-0 z-5 transition-all duration-300 ${
+        isScrolled ? "glass-card" : "bg-transparent"
+      }`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">

@@ -6,17 +6,16 @@ import { Button } from "@/components/app-components/ui/button";
 import { useEffect, useState } from "react";
 import ProfileEdit from "@/components/app-components/profileEdit";
 import ProfileView from "@/components/app-components/profileView";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import { ResumeType } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 export default function UserProfilePage() {
   const [view, setView] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const [form, setForm] = useState<ResumeType>({
     profile: {
       name: "",
@@ -37,14 +36,6 @@ export default function UserProfilePage() {
   });
 
   /* --- EFFECTS --- */
-
-  // Listen for Firebase auth changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-    });
-    return unsubscribe;
-  }, [auth]);
 
   useEffect(() => {
     if (user) {

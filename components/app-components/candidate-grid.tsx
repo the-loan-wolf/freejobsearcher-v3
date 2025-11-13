@@ -1,23 +1,13 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
 import {
   CandidateCard,
   CandidateGridSkeleton,
 } from "@/components/app-components/candidate-card";
 import { Button } from "@/components/app-components/ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  limit,
-  query,
-} from "firebase/firestore";
-import { app } from "@/lib/firebaseLib";
 import Link from "next/link";
 import { usePaginatedPosts } from "@/hooks/usePaginatedPosts";
+import { useAuth } from "@/hooks/useAuth";
 
 interface CandidateGridProps {
   searchQuery?: string;
@@ -35,39 +25,10 @@ interface Candidate {
   skills: string[];
 }
 
-const db = getFirestore(app);
-async function fetchFeed(user: User | null): Promise<Candidate[]> {
-  const collectionRef = collection(db, "resumes");
-  const q = query(collectionRef, limit(user ? 6 : 5));
-  const querySnapshot = await getDocs(q);
-  const documents: Candidate[] = [];
-  querySnapshot.forEach((doc) => {
-    documents.push({
-      id: doc.id,
-      ...doc.data().profile,
-      skills: [...doc.data().skills],
-    });
-  });
-  return documents;
-}
-
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const { posts, loadMore, loading, noMore } = usePaginatedPosts(5);
+  const { user } = useAuth();
   // const [visibleCount, setVisibleCount] = useState(5);
-  const [user, setUser] = useState<User | null>(null);
-  const auth = getAuth(app);
-  // const { data, error, isLoading } = useQuery({
-  //   queryKey: ["userFeed", user?.uid],
-  //   queryFn: () => fetchFeed(user),
-  // });
-
-  // Listen for Firebase auth changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-    });
-    return unsubscribe;
-  }, [auth]);
 
   // const filteredCandidates = useMemo(() => {
   //   if (!data) return []; // safely handle undefined
@@ -95,7 +56,6 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
 
   // Conditional render (not early return)
   if (loading) return <CandidateGridSkeleton />;
-  // if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="space-y-8">
@@ -136,11 +96,7 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
       ) : (
         <div className="flex justify-center">
           <Button asChild>
-            <Link
-              href={"/app/signin"}
-            >
-              Sign In to see more
-            </Link>
+            <Link href={"/app/signin"}>Sign In to see more</Link>
           </Button>
         </div>
       )}
