@@ -211,7 +211,7 @@ export default function ProfileEdit({
             ...form,
             createdAt: serverTimestamp(),
             ytVid: videoExist
-              ? videoExist
+              ? form.ytVid
               : "" /* we are directly providing value here because state update will take time(state is going to update in next run) and right now we will get old value */,
           },
           { merge: true },

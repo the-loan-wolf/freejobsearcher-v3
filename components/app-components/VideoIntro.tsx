@@ -52,7 +52,7 @@ export default function VideoIntro({
     <div className="space-y-2">
       <Label htmlFor="ytlink">Video link</Label>
       <Input
-        required
+        type="url"
         id="ytlink"
         value={vid}
         pattern="^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(?:-nocookie)?\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
