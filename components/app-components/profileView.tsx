@@ -9,6 +9,7 @@ import {
   Award,
   Hammer,
   Calendar,
+  Video,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -120,11 +121,12 @@ export default function ProfileView({
           </CardContent>
         </Card>
 
+        {/* --- VIDEO --- */}
         {ytVideoID && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Briefcase className="mr-2 h-5 w-5" />
+                <Video className="mr-2 h-5 w-5" />
                 Video
               </CardTitle>
             </CardHeader>

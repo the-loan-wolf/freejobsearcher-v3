@@ -12,6 +12,7 @@ import {
   Briefcase,
   GraduationCap,
   CircleUserRound,
+  Video,
 } from "lucide-react";
 import { Button } from "@/components/app-components/ui/button";
 import {
@@ -144,6 +145,13 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     queryFn: () => fetchFeed(candidateId),
   });
 
+  let ytVideoID: string | null = "";
+
+  if (candidate && candidate.ytVid) {
+    const url = new URL(candidate.ytVid).searchParams;
+    ytVideoID = url.get("v");
+  }
+
   if (isLoading) return <ProfileSkeleton />;
   if (isError || !candidate) notFound();
 
@@ -264,6 +272,31 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                 </p>
               </CardContent>
             </Card>
+
+            {/* --- VIDEO --- */}
+            {ytVideoID && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Video className="mr-2 h-5 w-5" />
+                    Video
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <iframe
+                    allowFullScreen={true}
+                    // className="border-0 mt-2"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    // title="Getting started | Video viewing basics"
+                    // width="400"
+                    // height="230"
+                    src={`https://www.youtube.com/embed/${ytVideoID}?autoplay=0&amp;cc_lang_pref=en&amp;cc_load_policy=1&amp;controls=2&amp;rel=0&amp;hl=en&amp;enablejsapi=1&amp;widgetid=1&vf=6`}
+                    id="widget2"
+                  ></iframe>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Contact Info */}
             <Card>
