@@ -1,6 +1,8 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { AuthProvider } from "@/app/app/AuthContext";
 
@@ -13,7 +15,17 @@ export function Providers({
 
   return (
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <TanStackDevtools
+          plugins={[
+            {
+              name: "TanStack Query",
+              render: <ReactQueryDevtoolsPanel />,
+            },
+          ]}
+        />
+      </QueryClientProvider>
     </AuthProvider>
   );
 }

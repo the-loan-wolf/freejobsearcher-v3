@@ -26,8 +26,10 @@ interface Candidate {
 }
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
-  const { posts, loadMore, loading, noMore } = usePaginatedPosts(5);
+  const { posts, loadMore, loading, isFetchingMore, noMore } =
+    usePaginatedPosts(5);
   const { user } = useAuth();
+
   // const [visibleCount, setVisibleCount] = useState(5);
 
   // const filteredCandidates = useMemo(() => {
@@ -88,7 +90,12 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
         !loading &&
         !noMore && (
           <div className="flex justify-center">
-            <Button onClick={loadMore} variant="outline" size="lg">
+            <Button
+              onClick={() => loadMore()}
+              disabled={isFetchingMore || noMore}
+              variant="outline"
+              size="lg"
+            >
               Load More Candidates
             </Button>
           </div>
