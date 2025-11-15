@@ -141,7 +141,11 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                         <Mail className="h-4 w-4 mr-2" />
                         Contact Candidate
                       </Button>
-                      <Favorite uid={candidate.id} className="w-full bg-transparent" innerText="Save Profile" />
+                      <Favorite
+                        uid={candidate.id}
+                        className="w-full bg-transparent"
+                        innerText="Save Profile"
+                      />
                     </div>
                   </div>
                 </div>
@@ -198,7 +202,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 {user ? (
-                  candidate.contact?.phones?.map((phone: any, i: number) => (
+                  candidate.contact?.phones?.map((phone: string, i: number) => (
                     <div key={`phone-${i}`} className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-primary" />
                       <span>{phone}</span>
@@ -215,7 +219,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                   </div>
                 )}
                 {user ? (
-                  candidate.contact?.emails?.map((email: any, i: number) => (
+                  candidate.contact?.emails?.map((email: string, i: number) => (
                     <div key={`email-${i}`} className="flex items-center gap-3">
                       <Mail className="h-5 w-5 text-primary" />
                       <span>{email}</span>
@@ -234,7 +238,10 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                 <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <span>
-                    Joined {new Date(candidate.createdAt).toLocaleDateString()}
+                    Joined{" "}
+                    {new Date(
+                      candidate.createdAt.toDate()
+                    ).toLocaleDateString()}
                   </span>
                 </div>
               </CardContent>
@@ -269,20 +276,29 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {candidate.workHistory?.map((work: any, index: number) => (
-                  <div
-                    key={index}
-                    className="border-l-2 border-primary/20 pl-4"
-                  >
-                    <h4 className="font-semibold text-foreground">
-                      {work.position}
-                    </h4>
-                    <p className="text-primary font-medium">{work.company}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {work.duration}
-                    </p>
-                  </div>
-                ))}
+                {candidate.workHistory?.map(
+                  (
+                    work: {
+                      position: string;
+                      company: string;
+                      duration: string;
+                    },
+                    index: number
+                  ) => (
+                    <div
+                      key={index}
+                      className="border-l-2 border-primary/20 pl-4"
+                    >
+                      <h4 className="font-semibold text-foreground">
+                        {work.position}
+                      </h4>
+                      <p className="text-primary font-medium">{work.company}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {work.duration}
+                      </p>
+                    </div>
+                  )
+                )}
               </CardContent>
             </Card>
 
@@ -295,20 +311,27 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {candidate.education?.map((edu: any, index: number) => (
-                  <div
-                    key={index}
-                    className="border-l-2 border-primary/20 pl-4"
-                  >
-                    <h4 className="font-semibold text-foreground">
-                      {edu.degree}
-                    </h4>
-                    <p className="text-primary font-medium">
-                      {edu.institution}
-                    </p>
-                    <p className="text-sm text-muted-foreground">{edu.year}</p>
-                  </div>
-                ))}
+                {candidate.education?.map(
+                  (
+                    edu: { degree: string; institution: string; year: string },
+                    index: number
+                  ) => (
+                    <div
+                      key={index}
+                      className="border-l-2 border-primary/20 pl-4"
+                    >
+                      <h4 className="font-semibold text-foreground">
+                        {edu.degree}
+                      </h4>
+                      <p className="text-primary font-medium">
+                        {edu.institution}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {edu.year}
+                      </p>
+                    </div>
+                  )
+                )}
               </CardContent>
             </Card>
 
@@ -330,7 +353,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                           {achievement}
                         </span>
                       </li>
-                    ),
+                    )
                   )}
                 </ul>
               </CardContent>
