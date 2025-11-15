@@ -3,63 +3,64 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/app-components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProfileEdit from "@/components/app-components/profileEdit";
 import ProfileView from "@/components/app-components/profileView";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { app } from "@/lib/firebaseLib";
-import { ResumeType } from "@/lib/types";
 import { useAuth } from "@/hooks/useAuth";
-
-const db = getFirestore(app);
+import { useQuery } from "@tanstack/react-query";
+import fetchCandidate from "@/lib/fetchCandidate";
+import ProfileSkeleton from "@/components/app-components/profileSkeleton";
+import { Spinner } from "@/components/app-components/ui/spinner";
 
 export default function UserProfilePage() {
   const [view, setView] = useState(true);
-  const { user } = useAuth();
-  const [form, setForm] = useState<ResumeType>({
-    profile: {
-      name: "",
-      role: "",
-      location: "",
-      salary: "",
-      image: "",
-      experience: "",
-      bio: "",
-    },
-    contact: { phones: [""], emails: [""] },
-    education: [{ degree: "", institution: "", year: "" }],
-    workHistory: [{ company: "", position: "", duration: "" }],
-    achievements: [""],
-    skills: [""],
-    createdAt: null,
-    ytVid: "",
+  const { user, loading: isAuthLoading } = useAuth();
+  const userId = user?.uid;
+  const {
+    data: form,
+    isLoading: isProfileLoading,
+    isError,
+  } = useQuery({
+    queryKey: [userId],
+    queryFn: () => fetchCandidate(userId!),
+    enabled: !!userId,
   });
 
-  /* --- EFFECTS --- */
+  // --- Render Logic ---
 
-  useEffect(() => {
-    if (user) {
-      const fetchData = async () => {
-        try {
-          // User is guaranteed non-null here, so we can use user.uid
-          const docRef = doc(db, "resumes", user.uid);
-          const docSnap = await getDoc(docRef);
+  // State 1: Auth is checking (show a simple, page-wide loader)
+  if (isAuthLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner className="size-auto" />
+      </div>
+    );
+  }
 
-          if (docSnap.exists()) {
-            // Set the form state
-            setForm(docSnap.data() as ResumeType);
-          } else {
-            // Document does not exist (e.g., new user)
-            console.log("No resume document found. Using default form state.");
-          }
-        } catch (error) {
-          // Log any errors that occurred during the process
-          console.error("Failed to fetch user resume data:", error);
-        }
-      };
-      fetchData();
-    }
-  }, [user, db]);
+  // State 2: Auth is done, but there is no user
+  // (Show this *before* the profile loading check)
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Please sign in to view your profile.
+      </div>
+    );
+  }
+
+  // State 3: Auth is done, user exists, but profile is loading
+  // (This is the *only* time to show the skeleton)
+  if (isProfileLoading) {
+    return <ProfileSkeleton />;
+  }
+
+  // State 4: Auth is done, user exists, but profile fetch failed
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Error loading your profile. Please try again.
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,9 +81,9 @@ export default function UserProfilePage() {
           )}
 
           {view ? (
-            <ProfileView setView={setView} user={form} />
+            <ProfileView setView={setView} user={form!} />
           ) : (
-            <ProfileEdit form={form} setForm={setForm} user={user} />
+            <ProfileEdit initialData={form!} user={user} />
           )}
         </div>
       </div>
