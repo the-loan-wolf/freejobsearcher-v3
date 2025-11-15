@@ -144,7 +144,7 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
               >
                 <Link
                   href={`/app/profile/${candidate.id}`}
-                  target="_blank"
+                  // target="_blank"
                   className="w-[85%]"
                 >
                   View Profile
