@@ -17,14 +17,16 @@ export function Providers({
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         {children}
-        <TanStackDevtools
-          plugins={[
-            {
-              name: "TanStack Query",
-              render: <ReactQueryDevtoolsPanel />,
-            },
-          ]}
-        />
+        {process.env.NODE_ENV === "development" && (
+          <TanStackDevtools
+            plugins={[
+              {
+                name: "TanStack Query",
+                render: <ReactQueryDevtoolsPanel />,
+              },
+            ]}
+          />
+        )}
       </QueryClientProvider>
     </AuthProvider>
   );
