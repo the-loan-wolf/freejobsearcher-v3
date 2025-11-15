@@ -29,33 +29,10 @@ import {
 } from "@/components/app-components/ui/avatar";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { app } from "@/lib/firebaseLib";
 import { useAuth } from "@/hooks/useAuth";
 import Favorite from "@/components/app-components/favorite";
-
-const db = getFirestore(app);
-
-async function fetchFeed(uid: string) {
-  if (uid) {
-    try {
-      // User is guaranteed non-null here, so we can use user.uid
-      const docRef = doc(db, "resumes", uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        // Set the form state
-        return docSnap.data();
-      } else {
-        // Document does not exist (e.g., new user)
-        console.log("No resume document founde.");
-      }
-    } catch (error) {
-      // Log any errors that occurred during the process
-      console.error("Failed to fetch user resume data:", error);
-    }
-  }
-}
+import fetchCandidate from "@/lib/fetchCandidate";
+import ProfileSkeleton from "@/components/app-components/profileSkeleton";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -123,7 +100,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     isError,
   } = useQuery({
     queryKey: [candidateId],
-    queryFn: () => fetchFeed(candidateId),
+    queryFn: () => fetchCandidate(candidateId),
   });
 
   let ytVideoID: string | null = "";
