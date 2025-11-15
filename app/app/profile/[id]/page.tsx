@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import { notFound } from "next/navigation";
 import {
   MapPin,
@@ -31,7 +31,6 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
-import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import Favorite from "@/components/app-components/favorite";
 
@@ -117,23 +116,13 @@ export default function ProfilePage({ params }: ProfilePageProps) {
 
   // --- STATES --- //
   const { user } = useAuth();
-  const [condition, setCondition] = useState("none");
-
-  // --- HANDLERS --- //
-  const favoriteButtonHandler = () => {
-    if (!user) {
-      toast.warning("Need to Sign In first");
-    } else {
-      setCondition((prev) => (prev === "none" ? "yellow" : "none"));
-    }
-  };
 
   const {
     data: candidate,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["candidateProfile", candidateId],
+    queryKey: [candidateId],
     queryFn: () => fetchFeed(candidateId),
   });
 
