@@ -11,13 +11,13 @@
 - ~~make load more button to fetch next 5 profile~~ (loadmore branch)
 - ~send resume data to server~
 - ~show server data on the resume edit page~
-- make setting page work by sending settings values to backend
 - ~make auth context provider and replace all the redundant auth logic from each routes and component with it.~
 - ~make new private collections for favorite, contacts & settings in firestore~
 - ~bug: clicking on add phone & email button also trigger toast containing "resume saved successfully"~
 - ~remove rupees symbol from DB and add to the frontend JSX~
-- add animation on button being pressed
 - ~add youtube video element~
+- add animation on button being pressed
+- make setting page work by sending settings values to backend
 - add contact timing
 - add fresher option for candidate with no experience
-- make favorite button actually work(connect to the backend)
+- ~make favorite button actually work(connect to the backend)~

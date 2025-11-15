@@ -1,4 +1,4 @@
-import { MapPin, Clock, Star } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/app-components/ui/card";
 import { Button } from "@/components/app-components/ui/button";
 import { Badge } from "@/components/app-components/ui/badge";
@@ -8,9 +8,7 @@ import {
   AvatarFallback,
 } from "@/components/app-components/ui/avatar";
 import Link from "next/link";
-import { User } from "firebase/auth";
-import { toast } from "sonner";
-import { useState } from "react";
+import Favorite from "./favorite";
 
 interface Candidate {
   id: string;
@@ -25,7 +23,6 @@ interface Candidate {
 
 interface CandidateCardProps {
   candidate: Candidate;
-  user: User | null;
 }
 
 export function CandidateGridSkeleton() {
@@ -79,18 +76,7 @@ export function CandidateGridSkeleton() {
   );
 }
 
-export function CandidateCard({ candidate, user }: CandidateCardProps) {
-  // --- STATES --- //
-  const [condition, setCondition] = useState("none");
-
-  // --- HANDLERS --- //
-  const favoriteButtonHandler = () => {
-    if (!user) {
-      toast.warning("Need to Sign In first");
-    } else {
-      setCondition((prev) => (prev === "none" ? "yellow" : "none"));
-    }
-  };
+export function CandidateCard({ candidate }: CandidateCardProps) {
 
   return (
     <Card className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
@@ -164,27 +150,7 @@ export function CandidateCard({ candidate, user }: CandidateCardProps) {
                   View Profile
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent"
-                onClick={favoriteButtonHandler}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill={condition}
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-star-icon lucide-star h-4 w-4"
-                >
-                  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                </svg>
-              </Button>
+              <Favorite uid={candidate.id} className="border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent" />
             </div>
           </div>
         </div>
