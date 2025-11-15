@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/app-components/ui/input";
 import { Label } from "@/components/app-components/ui/label";
 import { Textarea } from "@/components/app-components/ui/textarea";
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { FormEvent, useState } from "react";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import { User as firebaseuser } from "firebase/auth";
@@ -18,22 +18,23 @@ import { toast } from "sonner";
 import ProfilePicUpload from "@/components/app-components/ProfilePicUpload";
 import { ResumeType } from "@/lib/types";
 import VideoIntro from "./VideoIntro";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function ProfileEdit({
-  form,
-  setForm,
+  initialData,
   user,
 }: {
-  form: ResumeType;
-  setForm: Dispatch<SetStateAction<ResumeType>>;
-  user: firebaseuser | null;
+  initialData: ResumeType;
+  user: firebaseuser;
 }) {
   /* --- STATES --- */
-
+  const [form, setForm] = useState<ResumeType>(initialData);
   const [videoExist, setVideoExist] = useState(false);
 
-  /* --- HANDLERS --- */
+  // Get the query client
+  const queryClient = useQueryClient();
 
+  /* --- HANDLERS --- */
   const updateProfile = (key: string, value: string) => {
     setForm((prev) => ({
       ...prev,
@@ -196,32 +197,43 @@ export default function ProfileEdit({
     setForm((prev) => ({ ...prev, ytVid: vid }));
   };
 
+  /* --- MUTATION LOGIC --- */
+
+  // 5. Define the async function that does the saving
+  const saveResumeToFirebase = async (formData: ResumeType) => {
+    const db = getFirestore(app);
+    const docRef = doc(db, "resumes", user.uid);
+
+    const dataToSave = {
+      ...formData,
+      createdAt: serverTimestamp(),
+      ytVid: videoExist ? formData.ytVid : "",
+    };
+
+    await setDoc(docRef, dataToSave, { merge: true });
+    return dataToSave; // Return the saved data (optional)
+  };
+
+  // 6. Create the mutation hook
+  const { mutate: saveResume, isPending: isSaving } = useMutation({
+    mutationFn: saveResumeToFirebase,
+    onSuccess: () => {
+      // 7. THE MAGIC: Invalidate the parent's query
+      // This key MUST match the useQuery key in page.tsx
+      queryClient.invalidateQueries({ queryKey: [user.uid] });
+      toast.success("Resume saved successfully");
+    },
+    onError: (error) => {
+      console.error("Error during saving resume:", error);
+      toast.error("Failed to save resume. Try again.");
+    },
+  });
+
+  // 8. Update handleSubmit to use the mutation
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const db = getFirestore(app);
-    if (!videoExist) {
-      setForm((prev) => ({ ...prev, ytVid: "" })); // this will reset the state in the next run
-    }
-    if (user) {
-      const docRef = doc(db, "resumes", user.uid);
-      try {
-        setDoc(
-          docRef,
-          {
-            ...form,
-            createdAt: serverTimestamp(),
-            ytVid: videoExist
-              ? form.ytVid
-              : "" /* we are directly providing value here because state update will take time(state is going to update in next run) and right now we will get old value */,
-          },
-          { merge: true },
-        );
-        toast.success("resumes saved successfully");
-      } catch (error) {
-        console.error("Error during saving resume:", error);
-        toast.error("Failed to save resume. Try again.");
-      }
-    }
+    // We already know user exists from parent component logic
+    saveResume(form); // Pass the current local state to the mutation
   };
 
   return (
@@ -614,8 +626,8 @@ export default function ProfileEdit({
                     </CardContent>
                   </Card>
                   <div className="mt-8">
-                    <Button size="lg" type="submit">
-                      Save Changes
+                    <Button size="lg" type="submit" disabled={isSaving}>
+                      {isSaving ? "Saving..." : "Save Changes"}
                     </Button>
                   </div>
                 </CardContent>
