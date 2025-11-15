@@ -92,7 +92,7 @@ export default function SignUpPage() {
                 id="name"
                 type="text"
                 name="name"
-                placeholder="John Doe"
+                // placeholder="John Doe"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -111,7 +111,7 @@ export default function SignUpPage() {
                 id="email"
                 type="email"
                 name="email"
-                placeholder="you@example.com"
+                // placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -130,7 +130,7 @@ export default function SignUpPage() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="••••••••"
+                // placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -149,7 +149,7 @@ export default function SignUpPage() {
                 id="confirmPassword"
                 type="password"
                 name="confirmPassword"
-                placeholder="••••••••"
+                // placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
