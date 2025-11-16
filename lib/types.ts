@@ -29,4 +29,5 @@ export type ResumeType = {
   createdAt: Timestamp;
   ytVid: string;
   id: string;
+  isFavorited: boolean;
 };

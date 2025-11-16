@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const db = getFirestore(app);
 
-async function fetchFavorites(user: User) {
+export async function fetchFavorites(user: User) {
   try {
     const docRef = doc(db, "favorites", user.uid);
     const response = await getDoc(docRef);
@@ -20,7 +20,7 @@ async function fetchFavorites(user: User) {
       return response.data() as FavoritesData;
     }
     return { favorites: [{ uid: "" }] } as FavoritesData;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export const usePaginatedPosts = (pageSize = 10) => {

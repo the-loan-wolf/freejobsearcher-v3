@@ -33,6 +33,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Favorite from "@/components/app-components/favorite";
 import fetchCandidate from "@/lib/fetchCandidate";
 import ProfileSkeleton from "@/components/app-components/profileSkeleton";
+import { fetchFavorites } from "@/hooks/usePaginatedPosts";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -50,7 +51,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const { user } = useAuth();
 
   const {
-    data: candidate,
+    data: post,
     isLoading,
     isError,
   } = useQuery({
@@ -58,15 +59,30 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     queryFn: () => fetchCandidate(candidateId),
   });
 
-  let ytVideoID: string | null = "";
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => fetchFavorites(user!),
+    enabled: !!user,
+  });
 
-  if (candidate && candidate.ytVid) {
-    const url = new URL(candidate.ytVid).searchParams;
+  let ytVideoID: string | null = "";
+  if (post && post.ytVid) {
+    const url = new URL(post.ytVid).searchParams;
     ytVideoID = url.get("v");
   }
 
   if (isLoading) return <ProfileSkeleton />;
-  if (isError || !candidate) notFound();
+  if (isError || !post) notFound();
+
+  // 1. Create a safe reference to the array, providing an empty array as a fallback.
+  const favoritesArray = favorites?.favorites ?? [];
+  // 2. Create the Set using the safe array reference.
+  const favoriteUidSet = new Set(favoritesArray.map((fav) => fav.uid));
+  // 3. Use the Set for quick lookup.
+  const candidate = {
+    ...post,
+    isFavorited: favoriteUidSet.has(candidateId)
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,6 +159,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                       </Button>
                       <Favorite
                         uid={candidate.id}
+                        isFavorited={candidate.isFavorited}
                         className="w-full bg-transparent"
                         innerText="Save Profile"
                       />

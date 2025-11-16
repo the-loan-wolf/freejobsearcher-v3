@@ -13,7 +13,7 @@ export default async function fetchCandidate(uid: string) {
 
       if (docSnap.exists()) {
         // Set the form state
-        return { ...docSnap.data(), id: docSnap.id } as ResumeType;
+        return { ...docSnap.data(), id: docSnap.id, isFavorited: false } as ResumeType;
       } else {
         // Document does not exist (e.g., new user)
         console.log("No resume document founde.");
