@@ -13,13 +13,6 @@ import { app } from "./firebaseLib";
 
 const db = getFirestore(app);
 
-// export type Profile = {
-//   id: string;
-//   title: string;
-//   content: string;
-//   createdAt: Timestamp; // or Timestamp from Firestore
-// };
-
 export interface Profile {
   id: string;
   name: string;
@@ -31,6 +24,7 @@ export interface Profile {
   bio: string;
   skills: string[];
   createdAt: Timestamp;
+  isFavorited: boolean;
 }
 
 export const fetchProfile = async (
@@ -57,6 +51,7 @@ export const fetchProfile = async (
         id: doc.id,
         ...doc.data().profile,
         skills: [...doc.data().skills],
+        isFavorited: false,
       }) as Profile, // Type assertion here — we know the structure of the data
   );
 

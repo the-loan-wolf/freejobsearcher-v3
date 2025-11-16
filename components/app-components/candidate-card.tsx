@@ -9,21 +9,7 @@ import {
 } from "@/components/app-components/ui/avatar";
 import Link from "next/link";
 import Favorite from "./favorite";
-
-interface Candidate {
-  id: string;
-  name: string;
-  role: string;
-  location: string;
-  salary: string;
-  image: string;
-  skills: string[];
-  experience: string;
-}
-
-interface CandidateCardProps {
-  candidate: Candidate;
-}
+import { Profile } from "@/lib/fetchProfile";
 
 export function CandidateGridSkeleton() {
   return (
@@ -76,8 +62,7 @@ export function CandidateGridSkeleton() {
   );
 }
 
-export function CandidateCard({ candidate }: CandidateCardProps) {
-
+export function CandidateCard({ candidate }: { candidate: Profile }) {
   return (
     <Card className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10 border-primary/10 hover:border-primary/30">
       <CardContent className="p-6">
@@ -150,7 +135,11 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
                   View Profile
                 </Link>
               </Button>
-              <Favorite uid={candidate.id} className="border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent" />
+              <Favorite
+                uid={candidate.id}
+                isFavorited={candidate.isFavorited}
+                className="border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary bg-transparent"
+              />
             </div>
           </div>
         </div>
