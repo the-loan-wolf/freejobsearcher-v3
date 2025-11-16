@@ -13,18 +13,6 @@ interface CandidateGridProps {
   searchQuery?: string;
 }
 
-interface Candidate {
-  id: string;
-  name: string;
-  role: string;
-  location: string;
-  salary: string;
-  image: string;
-  experience: string;
-  bio: string;
-  skills: string[];
-}
-
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const { posts, loadMore, loading, isFetchingMore, noMore } =
     usePaginatedPosts(5);
