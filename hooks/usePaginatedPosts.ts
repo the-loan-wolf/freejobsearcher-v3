@@ -1,8 +1,30 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchProfile, Profile } from "../lib/fetchProfile";
 import { QueryDocumentSnapshot } from "firebase/firestore";
+import { User } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { app } from "@/lib/firebaseLib";
+import mapProfilesToFavorites, {
+  FavoritesData,
+} from "@/lib/mapProfilesToFavorites";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+
+const db = getFirestore(app);
+
+async function fetchFavorites(user: User) {
+  try {
+    const docRef = doc(db, "favorites", user.uid);
+    const response = await getDoc(docRef);
+    if (response.exists()) {
+      return response.data() as FavoritesData;
+    }
+    return { favorites: [{ uid: "" }] } as FavoritesData;
+  } catch (error) {}
+}
 
 export const usePaginatedPosts = (pageSize = 10) => {
+  const { user } = useAuth();
   const {
     data,
     fetchNextPage, // This is the new 'loadMore'
@@ -10,11 +32,11 @@ export const usePaginatedPosts = (pageSize = 10) => {
     isLoading, // True on initial load
     isFetchingNextPage, // True only when fetching the next page
   } = useInfiniteQuery({
-    // 1. Query Key: Unique ID for this data
+    // Query Key: Unique ID for this data
     // Includes 'pageSize' so if you change page size, it's a new query
     queryKey: ["profiles", pageSize],
 
-    // 2. Query Function: The function that fetches the data
+    // Query Function: The function that fetches the data
     // It's passed an object with `pageParam`
     // `pageParam` is what we will use as our 'lastDoc' cursor
     queryFn: ({ pageParam }) => {
@@ -23,10 +45,10 @@ export const usePaginatedPosts = (pageSize = 10) => {
       return fetchProfile(pageSize, pageParam);
     },
 
-    // 3. Initial Page Param: What to use for `pageParam` on the very first fetch
+    // Initial Page Param: What to use for `pageParam` on the very first fetch
     initialPageParam: null as QueryDocumentSnapshot | null,
 
-    // 4. Get Next Page Param:
+    // Get Next Page Param:
     // This function tells TanStack Query what to use for the *next* `pageParam`
     // It receives the data from the *last* successful fetch (lastPage)
     getNextPageParam: (lastPage) => {
@@ -38,13 +60,23 @@ export const usePaginatedPosts = (pageSize = 10) => {
     },
   });
 
-  // 5. Map the data to the flat array your components expect
+  // Map the data to the flat array your components expect
   // `data.pages` is an array of all fetched pages.
   // Each page is { profile: [ ... ], lastVisible: ... }
   // We just want a flat array of all the profiles.
-  const posts: Profile[] = data?.pages.flatMap((page) => page.profile) ?? [];
+  const oldposts: Profile[] = data?.pages.flatMap((page) => page.profile) ?? [];
 
-  // 6. Return an object similar to your original hook
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => fetchFavorites(user!),
+    enabled: !!user,
+  });
+  const posts = mapProfilesToFavorites(
+    oldposts,
+    favorites || { favorites: [{ uid: "" }] },
+  );
+
+  // Return an object similar to your original hook
   return {
     posts,
     loadMore: fetchNextPage, // Rename `fetchNextPage` to `loadMore`
