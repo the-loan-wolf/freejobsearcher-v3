@@ -16,8 +16,10 @@
 - ~bug: clicking on add phone & email button also trigger toast containing "resume saved successfully"~
 - ~remove rupees symbol from DB and add to the frontend JSX~
 - ~add youtube video element~
+- ~make favorite button actually work(connect to the backend)~
 - add animation on button being pressed
 - make setting page work by sending settings values to backend
 - add contact timing
 - add fresher option for candidate with no experience
-- ~make favorite button actually work(connect to the backend)~
+- what happen if user signin with wrong credentials?
+- allow users to change the username(name filled on the signup page)

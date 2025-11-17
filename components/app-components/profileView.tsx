@@ -24,13 +24,16 @@ export default function ProfileView({
   setView: Dispatch<SetStateAction<boolean>>;
   user: ResumeType;
 }) {
-  // 1. Timestamp object from Firestore
-  const firestoreTimestamp = user.createdAt; // e.g., { seconds: 1678886400, nanoseconds: 0 }
-  // 2. Convert it to a standard JavaScript Date
+
   let userdate = "";
-  if (firestoreTimestamp) {
-    const jsDate = firestoreTimestamp.toDate();
-    userdate = jsDate.toLocaleDateString();
+  if (user.createdAt) {
+    // 1. Timestamp object from Firestore
+    const firestoreTimestamp = user.createdAt; // e.g., { seconds: 1678886400, nanoseconds: 0 }
+    // 2. Convert it to a standard JavaScript Date
+    if (firestoreTimestamp) {
+      const jsDate = firestoreTimestamp.toDate();
+      userdate = jsDate.toLocaleDateString();
+    }
   }
 
   let ytVideoID: string | null = "";
@@ -89,10 +92,13 @@ export default function ProfileView({
                 <MapPin className="h-4 w-4 text-muted-foreground mr-3" />
                 <span className="text-foreground">{user.profile.location}</span>
               </div>
-              <div className="flex items-center text-sm">
-                <Calendar className="h-4 w-4 text-muted-foreground mr-3" />
-                <span className="text-foreground">Joined {userdate}</span>
-              </div>
+              {user.createdAt && (
+                <div className="flex items-center text-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground mr-3" />
+                  <span className="text-foreground">Joined {userdate}</span>
+                </div>
+
+              )}
             </div>
 
             <Separator className="my-6" />

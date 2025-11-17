@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { AlertCircleIcon, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/app-components/ui/button";
 import { useState } from "react";
@@ -11,6 +11,11 @@ import { useQuery } from "@tanstack/react-query";
 import fetchCandidate from "@/lib/fetchCandidate";
 import ProfileSkeleton from "@/components/app-components/profileSkeleton";
 import { Spinner } from "@/components/app-components/ui/spinner";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/app-components/ui/alert";
 
 export default function UserProfilePage() {
   const [view, setView] = useState(true);
@@ -54,13 +59,26 @@ export default function UserProfilePage() {
   }
 
   // State 4: Auth is done, user exists, but profile fetch failed
-  if (isError) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Error loading your profile. Please try again.
-      </div>
-    );
-  }
+  let emptyForm = {
+    profile: {
+      name: "",
+      role: "",
+      location: "",
+      salary: "",
+      image: "",
+      experience: "",
+      bio: "",
+    },
+    contact: { phones: [""], emails: [""] },
+    education: [{ degree: "", institution: "", year: "" }],
+    workHistory: [{ company: "", position: "", duration: "" }],
+    achievements: [""],
+    skills: [""],
+    createdAt: null,
+    ytVid: "",
+    id: "",
+    isFavorited: false,
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,10 +98,20 @@ export default function UserProfilePage() {
             </Button>
           )}
 
+          {isError && (
+            <Alert variant="destructive">
+              <AlertCircleIcon />
+              <AlertTitle>Resume Empty</AlertTitle>
+              <AlertDescription>
+                Add your details to get your resume started.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {view ? (
-            <ProfileView setView={setView} user={form!} />
+            <ProfileView setView={setView} user={form || emptyForm} />
           ) : (
-            <ProfileEdit initialData={form!} user={user} />
+            <ProfileEdit initialData={form || emptyForm} user={user} />
           )}
         </div>
       </div>

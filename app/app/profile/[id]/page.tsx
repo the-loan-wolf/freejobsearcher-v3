@@ -257,7 +257,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
                   <span>
                     Joined{" "}
                     {new Date(
-                      candidate.createdAt.toDate()
+                      candidate.createdAt!.toDate()
                     ).toLocaleDateString()}
                   </span>
                 </div>
