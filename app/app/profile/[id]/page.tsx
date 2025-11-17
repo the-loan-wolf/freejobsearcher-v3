@@ -57,12 +57,14 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   } = useQuery({
     queryKey: [candidateId],
     queryFn: () => fetchCandidate(candidateId),
+    staleTime: Infinity
   });
 
   const { data: favorites } = useQuery({
     queryKey: ["favorites"],
     queryFn: () => fetchFavorites(user!),
     enabled: !!user,
+    staleTime: Infinity
   });
 
   let ytVideoID: string | null = "";

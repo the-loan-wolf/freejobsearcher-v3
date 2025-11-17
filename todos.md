@@ -17,9 +17,13 @@
 - ~remove rupees symbol from DB and add to the frontend JSX~
 - ~add youtube video element~
 - ~make favorite button actually work(connect to the backend)~
-- add animation on button being pressed
+- ~add animation on button being pressed~
+- ~what happen if user signin with wrong credentials?~
 - make setting page work by sending settings values to backend
 - add contact timing
 - add fresher option for candidate with no experience
-- what happen if user signin with wrong credentials?
 - allow users to change the username(name filled on the signup page)
+- implement search feature
+- implement profile filtering
+- make going to profile/{id} route faster
+- ## add resume generation templates

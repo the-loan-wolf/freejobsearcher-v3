@@ -70,6 +70,7 @@ export const usePaginatedPosts = (pageSize = 10) => {
     queryKey: ["favorites"],
     queryFn: () => fetchFavorites(user!),
     enabled: !!user,
+    staleTime: Infinity
   });
   const posts = mapProfilesToFavorites(
     oldposts,
