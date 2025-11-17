@@ -137,17 +137,17 @@ export default function ProfileView({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <iframe
-                allowFullScreen={true}
-                // className="border-0 mt-2"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                // title="Getting started | Video viewing basics"
-                // width="400"
-                // height="230"
-                src={`https://www.youtube.com/embed/${ytVideoID}?autoplay=0&amp;cc_lang_pref=en&amp;cc_load_policy=1&amp;controls=2&amp;rel=0&amp;hl=en&amp;enablejsapi=1&amp;widgetid=1&vf=6`}
-                id="widget2"
-              ></iframe>
+              <div
+                className="rounded-2xl antialiased overflow-hidden w-full aspect-video"
+              >
+                <iframe
+                  allowFullScreen={true}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  src={`https://www.youtube.com/embed/${ytVideoID}?autoplay=0&amp;cc_lang_pref=en&amp;cc_load_policy=1&amp;controls=2&amp;rel=0&amp;hl=en&amp;enablejsapi=1&amp;widgetid=1&vf=6`}
+                ></iframe>
+              </div>
             </CardContent>
           </Card>
         )}
