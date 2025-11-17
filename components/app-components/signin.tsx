@@ -25,17 +25,14 @@ export default function SignInPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      // const { uid, displayName, photoURL } = userCredential.user;
-      // localStorage.setItem("loggedInUser", uid);
-      // if (displayName) localStorage.setItem("displayName", displayName);
-      // if (photoURL) localStorage.setItem("photoURL", photoURL);
+      await signInWithEmailAndPassword(auth, email, password)
       toast.success("Logged In Successful!")
       setIsLoading(false)
       setTimeout(() => router.push('/app'), 500);
     } catch (error) {
       console.log(error);
       toast.error("Not able to sign in");
+      setIsLoading(false);
     }
   };
 
