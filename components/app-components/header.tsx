@@ -3,7 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 
-import { Search, LogOut, Settings, UserCircle } from "lucide-react";
+import { Search, LogOut, Settings, UserCircle, X } from 'lucide-react';
 import { Button } from "@/components/app-components/ui/button";
 import {
   DropdownMenu,
@@ -31,6 +31,7 @@ interface HeaderProps {
 
 export function Header({ onSearch }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -101,8 +102,19 @@ export function Header({ onSearch }: HeaderProps) {
               <InputGroupAddon>
                 <Search />
               </InputGroupAddon>
-              {/* <InputGroupAddon align="inline-end">12 results</InputGroupAddon> */}
             </InputGroup>
+
+            <button
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              className="sm:hidden p-2 hover:bg-primary/10 rounded-lg transition-colors"
+              aria-label="Search"
+            >
+              {isMobileSearchOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+            </button>
 
             {user ? (
               <DropdownMenu>
@@ -168,6 +180,21 @@ export function Header({ onSearch }: HeaderProps) {
             )}
           </div>
         </div>
+
+        {isMobileSearchOpen && (
+          <div className="sm:hidden mt-4 mb-2">
+            <InputGroup className="glass w-full">
+              <InputGroupInput
+                onChange={handleSearch}
+                placeholder="Search..."
+                autoFocus
+              />
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+        )}
       </div>
     </header>
   );
