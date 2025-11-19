@@ -42,17 +42,12 @@ export default function ProfileData({ candidateId }: { candidateId: string }) {
   const favoritesArray = favorites?.favorites ?? [];
   // 2. Create the Set using the safe array reference.
   const favoriteUidSet = new Set(favoritesArray.map((fav) => fav.uid));
-  // 3. Use the Set for quick lookup.
-  const candidate = {
-    ...post,
-    isFavorited: favoriteUidSet.has(candidateId)
-  };
 
   return (
     <ProfileClientUI
       candidatePost={post}
       user={user} // Pass the user object
-      initialIsFavorited={candidate.isFavorited} // Pass the pre-calculated favorite status
+      initialIsFavorited={favoriteUidSet.has(candidateId)}
       ytVideoID={ytVideoID}
     />
   );
