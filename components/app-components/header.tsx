@@ -5,7 +5,6 @@ import Link from "next/link";
 
 import { Search, LogOut, Settings, UserCircle } from "lucide-react";
 import { Button } from "@/components/app-components/ui/button";
-import { Input } from "@/components/app-components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +23,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/lib/firebaseLib";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { InputGroup, InputGroupInput, InputGroupAddon } from "./ui/input-group";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -93,14 +93,16 @@ export function Header({ onSearch }: HeaderProps) {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="relative hidden sm:block">
-              <Search className="absolute z-10 left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
-              <Input
-                placeholder="Search candidates..."
-                className="pl-10 w-64 glass border-primary/20 focus:border-primary/40 focus:ring-primary/20"
+            <InputGroup className="hidden sm:flex glass">
+              <InputGroupInput
                 onChange={handleSearch}
+                placeholder="Search..."
               />
-            </div>
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+              {/* <InputGroupAddon align="inline-end">12 results</InputGroupAddon> */}
+            </InputGroup>
 
             {user ? (
               <DropdownMenu>
