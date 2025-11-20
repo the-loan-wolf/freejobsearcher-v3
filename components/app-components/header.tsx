@@ -43,8 +43,13 @@ export function Header({ onSearch }: HeaderProps) {
   }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch?.(e.target.value.toLocaleLowerCase());
+    onSearch?.(e.target.value.toLowerCase());
   };
+
+  const closeSearch = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen);
+    onSearch?.("");
+  }
 
   const handleLogout = async () => {
     try {
@@ -105,7 +110,7 @@ export function Header({ onSearch }: HeaderProps) {
             </InputGroup>
 
             <button
-              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              onClick={closeSearch}
               className="sm:hidden p-2 hover:bg-primary/10 rounded-lg transition-colors"
               aria-label="Search"
             >
