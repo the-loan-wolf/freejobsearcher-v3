@@ -69,7 +69,7 @@ export function Header({ onSearch }: HeaderProps) {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-4 sm:space-x-8">
             <Link
               href="/app"
               className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300"
