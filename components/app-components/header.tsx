@@ -43,7 +43,7 @@ export function Header({ onSearch }: HeaderProps) {
   }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch?.(e.target.value);
+    onSearch?.(e.target.value.toLocaleLowerCase());
   };
 
   const handleLogout = async () => {
