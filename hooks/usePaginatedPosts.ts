@@ -23,7 +23,7 @@ export async function fetchFavorites(user: User) {
   } catch (error) { }
 }
 
-export const usePaginatedPosts = (pageSize = 10) => {
+export const usePaginatedPosts = (pageSize = 10, searchQuery: string) => {
   const { user } = useAuth();
   const {
     data,
@@ -34,7 +34,7 @@ export const usePaginatedPosts = (pageSize = 10) => {
   } = useInfiniteQuery({
     // Query Key: Unique ID for this data
     // Includes 'pageSize' so if you change page size, it's a new query
-    queryKey: ["profiles", pageSize],
+    queryKey: ["profiles", pageSize, searchQuery],
 
     // Query Function: The function that fetches the data
     // It's passed an object with `pageParam`
@@ -42,7 +42,7 @@ export const usePaginatedPosts = (pageSize = 10) => {
     queryFn: ({ pageParam }) => {
       // pageParam will be null on the first page
       // and a QueryDocumentSnapshot on subsequent pages
-      return fetchProfile(pageSize, pageParam);
+      return fetchProfile(pageSize, pageParam, searchQuery);
     },
 
     // Initial Page Param: What to use for `pageParam` on the very first fetch

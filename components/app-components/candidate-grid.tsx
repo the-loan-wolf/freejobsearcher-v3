@@ -15,7 +15,7 @@ interface CandidateGridProps {
 
 export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
   const { posts, loadMore, loading, isFetchingMore, noMore } =
-    usePaginatedPosts(5);
+    usePaginatedPosts(5, searchQuery);
   const { user } = useAuth();
 
   // const [visibleCount, setVisibleCount] = useState(5);

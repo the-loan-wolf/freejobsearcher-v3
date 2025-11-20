@@ -23,7 +23,9 @@
 - add contact timing
 - add fresher option for candidate with no experience
 - allow users to change the username(name filled on the signup page)
-- implement search feature
+- ~implement search feature~
+- add new field in DB, it'll contain array of jobs role, which can be used in searching
+- add a new function to normalize the string before submitting to the db
 - implement profile filtering
 - make going to profile/{id} route faster
 - ## add resume generation templates
