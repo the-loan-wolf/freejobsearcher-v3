@@ -31,7 +31,7 @@ interface HeaderProps {
 
 export function Header({ onSearch }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(true);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -109,17 +109,17 @@ export function Header({ onSearch }: HeaderProps) {
               </InputGroupAddon>
             </InputGroup>
 
-            <button
-              onClick={closeSearch}
-              className="sm:hidden p-2 hover:bg-primary/10 rounded-lg transition-colors"
-              aria-label="Search"
-            >
-              {isMobileSearchOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Search className="h-5 w-5" />
-              )}
-            </button>
+            {/* <button */}
+            {/*   onClick={closeSearch} */}
+            {/*   className="sm:hidden p-2 hover:bg-primary/10 rounded-lg transition-colors" */}
+            {/*   aria-label="Search" */}
+            {/* > */}
+            {/*   {isMobileSearchOpen ? ( */}
+            {/*     <X className="h-5 w-5" /> */}
+            {/*   ) : ( */}
+            {/*     <Search className="h-5 w-5" /> */}
+            {/*   )} */}
+            {/* </button> */}
 
             {user ? (
               <DropdownMenu>
