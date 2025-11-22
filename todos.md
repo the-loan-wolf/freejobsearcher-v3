@@ -9,23 +9,23 @@
 - ~~use firebase function to determine if a user is signed in or not in header bar~~
 - ~~connect log out button with firebase auth in the header bar~~
 - ~~make load more button to fetch next 5 profile~~ (loadmore branch)
-- ~send resume data to server~
-- ~show server data on the resume edit page~
-- ~make auth context provider and replace all the redundant auth logic from each routes and component with it.~
-- ~make new private collections for favorite, contacts & settings in firestore~
-- ~bug: clicking on add phone & email button also trigger toast containing "resume saved successfully"~
-- ~remove rupees symbol from DB and add to the frontend JSX~
-- ~add youtube video element~
-- ~make favorite button actually work(connect to the backend)~
-- ~add animation on button being pressed~
-- ~what happen if user signin with wrong credentials?~
+- ~~send resume data to server~~
+- ~~show server data on the resume edit page~~
+- ~~make auth context provider and replace all the redundant auth logic from each routes and component with it.~~
+- ~~make new private collections for favorite, contacts & settings in firestore~~
+- ~~bug: clicking on add phone & email button also trigger toast containing "resume saved successfully"~~
+- ~~remove rupees symbol from DB and add to the frontend JSX~~
+- ~~add youtube video element~~
+- ~~make favorite button actually work(connect to the backend)~~
+- ~~add animation on button being pressed~~
+- ~~what happen if user signin with wrong credentials?~~
 - make setting page work by sending settings values to backend
 - add contact timing
 - add fresher option for candidate with no experience
 - allow users to change the username(name filled on the signup page)
-- ~implement search feature~
+- ~~implement search feature~~
 - add new field in DB, it'll contain array of jobs role, which can be used in searching
-- add a new function to normalize the string before submitting to the db
+- ~~add a new function to normalize the string before submitting to the db~~
 - implement profile filtering
 - make going to profile/{id} route faster
 - ## add resume generation templates

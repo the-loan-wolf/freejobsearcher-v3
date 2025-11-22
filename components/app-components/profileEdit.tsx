@@ -259,7 +259,7 @@ export default function ProfileEdit({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">
-                        Name<span className="text-red-500">*</span>
+                        Full Name<span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="name"
@@ -516,8 +516,9 @@ export default function ProfileEdit({
                             </div>
 
                             <div className="space-y-2">
-                              <Label htmlFor={`duration-${i}`}>Duration</Label>
+                              <Label htmlFor={`duration-${i}`}>Duration<span className="text-red-500">*</span></Label>
                               <Input
+                                required
                                 id={`duration-${i}`}
                                 value={job.duration}
                                 onChange={(e) =>

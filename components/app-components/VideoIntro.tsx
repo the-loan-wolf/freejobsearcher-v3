@@ -50,7 +50,7 @@ export default function VideoIntro({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="ytlink">Video link</Label>
+      <Label htmlFor="ytlink">Self Introduction Video link</Label>
       <Input
         type="url"
         id="ytlink"
