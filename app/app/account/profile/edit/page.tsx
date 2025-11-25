@@ -1,8 +1,7 @@
 "use client";
 
 import { AlertCircleIcon, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import ProfileView from "@/components/app-components/profileView";
+import ProfileEdit from "@/components/app-components/profileEdit";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import fetchCandidate from "@/lib/fetchCandidate";
@@ -13,6 +12,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/app-components/ui/alert";
+import Link from "next/link";
 
 export default function UserProfilePage() {
   const { user, loading: isAuthLoading } = useAuth();
@@ -81,11 +81,11 @@ export default function UserProfilePage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
-            href="/app"
+            href="/app/account/profile"
             className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            Back to Profile
           </Link>
 
           {isError && (
@@ -98,7 +98,7 @@ export default function UserProfilePage() {
             </Alert>
           )}
 
-          <ProfileView user={form || emptyForm} />
+          <ProfileEdit initialData={form || emptyForm} user={user} />
         </div>
       </div>
     </div>

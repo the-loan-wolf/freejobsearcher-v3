@@ -1,4 +1,4 @@
-import { User, Plus, X } from "lucide-react";
+import { User, Plus, X, ChevronRight } from "lucide-react";
 import { Button } from "@/components/app-components/ui/button";
 import {
   Card,
@@ -19,6 +19,7 @@ import ProfilePicUpload from "@/components/app-components/ProfilePicUpload";
 import { ResumeType } from "@/lib/types";
 import VideoIntro from "./VideoIntro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function ProfileEdit({
   initialData,
@@ -265,7 +266,9 @@ export default function ProfileEdit({
                         id="name"
                         required
                         value={form.profile.name}
-                        onChange={(e) => updateProfile("name", e.target.value.toLowerCase())}
+                        onChange={(e) =>
+                          updateProfile("name", e.target.value.toLowerCase())
+                        }
                       />
                     </div>
                   </div>
@@ -281,7 +284,11 @@ export default function ProfileEdit({
                             id={`phone-${i}`}
                             value={p}
                             onChange={(e) =>
-                              updateContact("phones", i, e.target.value.toLowerCase())
+                              updateContact(
+                                "phones",
+                                i,
+                                e.target.value.toLowerCase(),
+                              )
                             }
                             className="flex-grow"
                           />
@@ -318,7 +325,11 @@ export default function ProfileEdit({
                             type="email"
                             value={p}
                             onChange={(e) =>
-                              updateContact("emails", i, e.target.value.toLowerCase())
+                              updateContact(
+                                "emails",
+                                i,
+                                e.target.value.toLowerCase(),
+                              )
                             }
                             className="flex-grow"
                           />
@@ -367,7 +378,9 @@ export default function ProfileEdit({
                       id="title"
                       required
                       value={form.profile.role}
-                      onChange={(e) => updateProfile("role", e.target.value.toLowerCase())}
+                      onChange={(e) =>
+                        updateProfile("role", e.target.value.toLowerCase())
+                      }
                     />
                   </div>
 
@@ -380,7 +393,10 @@ export default function ProfileEdit({
                       required
                       value={form.profile.experience}
                       onChange={(e) =>
-                        updateProfile("experience", e.target.value.toLowerCase())
+                        updateProfile(
+                          "experience",
+                          e.target.value.toLowerCase(),
+                        )
                       }
                     />
                   </div>
@@ -393,7 +409,9 @@ export default function ProfileEdit({
                       required
                       id="salary"
                       value={form.profile.salary}
-                      onChange={(e) => updateProfile("salary", e.target.value.toLowerCase())}
+                      onChange={(e) =>
+                        updateProfile("salary", e.target.value.toLowerCase())
+                      }
                     />
                   </div>
 
@@ -403,7 +421,9 @@ export default function ProfileEdit({
                       id="bio"
                       rows={4}
                       value={form.profile.bio}
-                      onChange={(e) => updateProfile("bio", e.target.value.toLowerCase())}
+                      onChange={(e) =>
+                        updateProfile("bio", e.target.value.toLowerCase())
+                      }
                     />
                   </div>
 
@@ -429,7 +449,11 @@ export default function ProfileEdit({
                                 id={`degree-${i}`}
                                 value={edu.degree}
                                 onChange={(e) =>
-                                  updateEducation(i, "degree", e.target.value.toLowerCase())
+                                  updateEducation(
+                                    i,
+                                    "degree",
+                                    e.target.value.toLowerCase(),
+                                  )
                                 }
                               />
                             </div>
@@ -455,7 +479,11 @@ export default function ProfileEdit({
                                 id={`year-${i}`}
                                 value={edu.year}
                                 onChange={(e) =>
-                                  updateEducation(i, "year", e.target.value.toLowerCase())
+                                  updateEducation(
+                                    i,
+                                    "year",
+                                    e.target.value.toLowerCase(),
+                                  )
                                 }
                               />
                             </div>
@@ -499,7 +527,11 @@ export default function ProfileEdit({
                                 id={`company-${i}`}
                                 value={job.company}
                                 onChange={(e) =>
-                                  updateWork(i, "company", e.target.value.toLowerCase())
+                                  updateWork(
+                                    i,
+                                    "company",
+                                    e.target.value.toLowerCase(),
+                                  )
                                 }
                               />
                             </div>
@@ -510,19 +542,29 @@ export default function ProfileEdit({
                                 id={`position-${i}`}
                                 value={job.position}
                                 onChange={(e) =>
-                                  updateWork(i, "position", e.target.value.toLowerCase())
+                                  updateWork(
+                                    i,
+                                    "position",
+                                    e.target.value.toLowerCase(),
+                                  )
                                 }
                               />
                             </div>
 
                             <div className="space-y-2">
-                              <Label htmlFor={`duration-${i}`}>Duration<span className="text-red-500">*</span></Label>
+                              <Label htmlFor={`duration-${i}`}>
+                                Duration<span className="text-red-500">*</span>
+                              </Label>
                               <Input
                                 required
                                 id={`duration-${i}`}
                                 value={job.duration}
                                 onChange={(e) =>
-                                  updateWork(i, "duration", e.target.value.toLowerCase())
+                                  updateWork(
+                                    i,
+                                    "duration",
+                                    e.target.value.toLowerCase(),
+                                  )
                                 }
                               />
                             </div>
@@ -562,7 +604,10 @@ export default function ProfileEdit({
                           <Input
                             value={a}
                             onChange={(e) =>
-                              updateAchievements(i, e.target.value.toLowerCase())
+                              updateAchievements(
+                                i,
+                                e.target.value.toLowerCase(),
+                              )
                             }
                             className="flex-grow"
                           />
@@ -600,7 +645,9 @@ export default function ProfileEdit({
                           <Input
                             value={s}
                             required
-                            onChange={(e) => updateSkills(i, e.target.value.toLowerCase())}
+                            onChange={(e) =>
+                              updateSkills(i, e.target.value.toLowerCase())
+                            }
                             className="flex-grow"
                           />
                           <span className="text-red-500">*</span>
@@ -634,6 +681,14 @@ export default function ProfileEdit({
                 </CardContent>
               </Card>
             </form>
+          </div>
+          <div className="flex justify-end p-2">
+            <Button asChild>
+              <Link href="edit/job-category">
+                Select job
+                <ChevronRight />
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

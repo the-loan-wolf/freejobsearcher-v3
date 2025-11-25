@@ -14,14 +14,12 @@ import {
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Dispatch, SetStateAction } from "react";
 import { ResumeType } from "@/lib/types";
+import Link from "next/link";
 
 export default function ProfileView({
-  setView,
   user,
 }: {
-  setView: Dispatch<SetStateAction<boolean>>;
   user: ResumeType;
 }) {
 
@@ -103,8 +101,10 @@ export default function ProfileView({
 
             <Separator className="my-6" />
 
-            <Button className="w-full" onClick={() => setView(false)}>
-              Edit profile
+            <Button className="w-full" asChild>
+              <Link href="profile/edit">
+                Edit profile
+              </Link>
             </Button>
           </CardContent>
         </Card>
