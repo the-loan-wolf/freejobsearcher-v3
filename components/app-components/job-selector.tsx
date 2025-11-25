@@ -94,7 +94,7 @@ export function JobSelector({ data }: JobSelectorProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-1rem)] max-w-7xl mx-auto gap-6 p-4 md:p-6">
+    <div className="flex flex-col h-[90vh] md:h-[100vh] max-w-7xl mx-auto gap-6 p-4 md:p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2 border-b">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Select Jobs</h1>
@@ -149,7 +149,7 @@ export function JobSelector({ data }: JobSelectorProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-full min-h-0">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-[90vh] md:h-full min-h-0">
         {/* Sidebar Navigation - Hidden on mobile */}
         <div className="hidden md:block md:col-span-3 lg:col-span-3">
           <ScrollArea className="h-[calc(100vh-12rem)] pr-4">
@@ -193,7 +193,7 @@ export function JobSelector({ data }: JobSelectorProps) {
         </div>
 
         {/* Main Content Area */}
-        <div className="col-span-1 md:col-span-9 lg:col-span-9 h-full overflow-y-auto pr-2 pb-20 scroll-smooth">
+        <div className="col-span-1 md:col-span-9 lg:col-span-9 overflow-y-auto pr-2 scroll-smooth">
           <div className="space-y-8">
             {filteredData.length > 0 ? (
               filteredData.map((category) => {
@@ -288,7 +288,7 @@ export function JobSelector({ data }: JobSelectorProps) {
           </div>
         </div>
       </div>
-      <div className="flex justify-start p-2 space-x-1">
+      <div className="flex justify-between">
         <Button onClick={() => router.back()}>Go Back</Button>
         <Button>Save</Button>
       </div>
