@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/app-components/ui/badge";
@@ -17,21 +17,75 @@ import { ScrollArea } from "@/components/app-components/ui/scroll-area";
 import { Separator } from "@/components/app-components/ui/separator";
 import type { JobCategory } from "@/lib/jobCategories";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import fetchCandidate from "@/lib/fetchCandidate";
+import { Spinner } from "./ui/spinner";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { app } from "@/lib/firebaseLib";
+import { toast } from "sonner";
+import { JobSelectorSkeleton } from "./JobSelectorSkeleton";
 
 interface JobSelectorProps {
   data: JobCategory[];
 }
 
 export function JobSelector({ data }: JobSelectorProps) {
-  const [selectedJobs, setSelectedJobs] = React.useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [activeCategory, setActiveCategory] = React.useState<string | null>(
+  const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(
     null,
   );
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
+  const { user, loading: isAuthLoading } = useAuth();
+  const userId = user?.uid;
+  const {
+    data: form,
+    isLoading: isProfileLoading,
+    isError,
+  } = useQuery({
+    queryKey: [userId],
+    queryFn: () => fetchCandidate(userId!),
+    enabled: !!userId,
+  });
+
+  // Initialize selectedJobs with existing data from the fetched form
+  useEffect(() => {
+    if (form && form.categories && selectedJobs.length === 0) {
+      // Assuming 'form' is the candidate object and 'categories' is the array of saved jobs
+      setSelectedJobs(form.categories as string[]);
+    }
+    // Dependency array includes 'form', but carefully exclude 'selectedJobs' 
+    // to avoid infinite loop when setting the state. 
+    // The condition 'selectedJobs.length === 0' prevents re-initialization.
+  }, [form]);
+
+  /* --- MUTATION LOGIC --- */
+  const saveResumeToFirebase = async () => {
+    const db = getFirestore(app);
+    const docRef = doc(db, "resumes", user!.uid);
+
+    await updateDoc(docRef, { categories: selectedJobs });
+    return selectedJobs; // Return the saved data (optional)
+  };
+
+  const { mutate: saveResume, isPending: isSaving } = useMutation({
+    mutationFn: saveResumeToFirebase,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [user!.uid] });
+      toast.success("Saved successfully");
+    },
+    onError: (error) => {
+      console.error("Error during saving:", error);
+      toast.error("Failed to save. Try again.");
+    },
+  });
+
   // Filter data based on search query
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     if (!searchQuery) return data;
 
     const lowerQuery = searchQuery.toLowerCase();
@@ -57,6 +111,28 @@ export function JobSelector({ data }: JobSelectorProps) {
       })
       .filter((cat): cat is JobCategory => cat !== null);
   }, [data, searchQuery]);
+
+  // --- Render Logic ---
+
+  if (isAuthLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner className="size-auto" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Please sign in to view your profile.
+      </div>
+    );
+  }
+
+  if (isProfileLoading) {
+    return <JobSelectorSkeleton />;
+  }
 
   const toggleJob = (job: string) => {
     setSelectedJobs((prev) =>
@@ -91,6 +167,10 @@ export function JobSelector({ data }: JobSelectorProps) {
   // Get selected count for a category
   const getCategorySelectedCount = (jobs: string[]) => {
     return jobs.filter((job) => selectedJobs.includes(job)).length;
+  };
+
+  const jobSaveHandler = () => {
+    saveResume();
   };
 
   return (
@@ -290,7 +370,16 @@ export function JobSelector({ data }: JobSelectorProps) {
       </div>
       <div className="flex justify-between">
         <Button onClick={() => router.back()}>Go Back</Button>
-        <Button>Save</Button>
+        <Button onClick={jobSaveHandler} disabled={isSaving}>
+          {isSaving ? (
+            <>
+              "Saving..."
+              <Spinner />
+            </>
+          ) : (
+            "Save"
+          )}
+        </Button>
       </div>
     </div>
   );

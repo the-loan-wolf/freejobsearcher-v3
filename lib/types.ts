@@ -30,4 +30,5 @@ export type ResumeType = {
   ytVid: string;
   id: string;
   isFavorited: boolean;
+  categories: string[];
 };

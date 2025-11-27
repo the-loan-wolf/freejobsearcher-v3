@@ -74,6 +74,7 @@ export default function UserProfilePage() {
     ytVid: "",
     id: "",
     isFavorited: false,
+    categories: [""]
   };
 
   return (
