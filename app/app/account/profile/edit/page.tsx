@@ -5,7 +5,6 @@ import ProfileEdit from "@/components/app-components/profileEdit";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import fetchCandidate from "@/lib/fetchCandidate";
-import ProfileSkeleton from "@/components/app-components/profileSkeleton";
 import { Spinner } from "@/components/app-components/ui/spinner";
 import {
   Alert,
@@ -13,6 +12,7 @@ import {
   AlertTitle,
 } from "@/components/app-components/ui/alert";
 import Link from "next/link";
+import ProfileEditSkeleton from "@/components/app-components/profileEditSkeleton";
 
 export default function UserProfilePage() {
   const { user, loading: isAuthLoading } = useAuth();
@@ -51,7 +51,7 @@ export default function UserProfilePage() {
   // State 3: Auth is done, user exists, but profile is loading
   // (This is the *only* time to show the skeleton)
   if (isProfileLoading) {
-    return <ProfileSkeleton />;
+    return <ProfileEditSkeleton />;
   }
 
   // State 4: Auth is done, user exists, but profile fetch failed

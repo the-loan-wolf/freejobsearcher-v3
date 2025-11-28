@@ -19,16 +19,16 @@
 - ~~make favorite button actually work(connect to the backend)~~
 - ~~add animation on button being pressed~~
 - ~~what happen if user signin with wrong credentials?~~
+- ~~implement search feature~~
+- ~~add a new function to normalize the string before submitting to the db~~
+- ~~improve accessibility by replacing html element with shadcn/ui component in job-selector component~~
+- ~~extract search and Sidebar component from job-selector component~~
+- ~~add new field in DB, it'll contain array of jobs role, which can be used in searching~~
+- ~~make loading skeleton component for edit page~~
 - make setting page work by sending settings values to backend
 - add contact timing
 - add fresher option for candidate with no experience
 - allow users to change the username(name filled on the signup page)
-- ~~implement search feature~~
-- add new field in DB, it'll contain array of jobs role, which can be used in searching
-- ~~add a new function to normalize the string before submitting to the db~~
 - implement profile filtering
 - make going to profile/{id} route faster
-- make loading skeleton component for edit page
-- ~~improve accessibility by replacing html element with shadcn/ui component in job-selector component~~
-- ~~extract search and Sidebar component from job-selector component~~
 - ## add resume generation templates
