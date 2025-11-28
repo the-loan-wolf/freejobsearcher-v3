@@ -28,4 +28,7 @@
 - ~~add a new function to normalize the string before submitting to the db~~
 - implement profile filtering
 - make going to profile/{id} route faster
+- make loading skeleton component for edit page
+- ~~improve accessibility by replacing html element with shadcn/ui component in job-selector component~~
+- ~~extract search and Sidebar component from job-selector component~~
 - ## add resume generation templates

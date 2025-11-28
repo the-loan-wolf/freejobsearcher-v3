@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/app-components/ui/badge";
 import { Button } from "@/components/app-components/ui/button";
 import {
   Card,
@@ -12,8 +11,6 @@ import {
   CardTitle,
 } from "@/components/app-components/ui/card";
 import { Checkbox } from "@/components/app-components/ui/checkbox";
-import { Input } from "@/components/app-components/ui/input";
-import { ScrollArea } from "@/components/app-components/ui/scroll-area";
 import { Separator } from "@/components/app-components/ui/separator";
 import type { JobCategory } from "@/lib/jobCategories";
 import { useRouter } from "next/navigation";
@@ -25,17 +22,17 @@ import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
 import { toast } from "sonner";
 import { JobSelectorSkeleton } from "./JobSelectorSkeleton";
+import JobSelectorSearch from "./JobSelectorSearch";
+import JobSelectorSidebar from "./JobSelectorSidebar";
 
-interface JobSelectorProps {
+export interface JobSelectorProps {
   data: JobCategory[];
 }
 
 export function JobSelector({ data }: JobSelectorProps) {
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string | null>(
-    null,
-  );
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const router = useRouter();
 
   const queryClient = useQueryClient();
@@ -58,8 +55,8 @@ export function JobSelector({ data }: JobSelectorProps) {
       // Assuming 'form' is the candidate object and 'categories' is the array of saved jobs
       setSelectedJobs(form.categories as string[]);
     }
-    // Dependency array includes 'form', but carefully exclude 'selectedJobs' 
-    // to avoid infinite loop when setting the state. 
+    // Dependency array includes 'form', but carefully exclude 'selectedJobs'
+    // to avoid infinite loop when setting the state.
     // The condition 'selectedJobs.length === 0' prevents re-initialization.
   }, [form]);
 
@@ -183,94 +180,22 @@ export function JobSelector({ data }: JobSelectorProps) {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 items-center w-full md:w-auto">
-          <div className="relative w-full md:w-[300px]">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search jobs or categories..."
-              className="pl-9"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground whitespace-nowrap px-2">
-              <span className="font-medium text-foreground">
-                {selectedJobs.length}
-              </span>{" "}
-              selected
-            </div>
-            {selectedJobs.length > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearSelection}
-                className="ml-auto sm:ml-0 bg-transparent"
-              >
-                Clear
-              </Button>
-            )}
-            <div className="sm:hidden flex items-center gap-2 text-sm text-muted-foreground ml-auto">
-              <span className="font-medium text-foreground">
-                {selectedJobs.length}
-              </span>{" "}
-              selected
-            </div>
-          </div>
-        </div>
+        <JobSelectorSearch
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedJobs={selectedJobs}
+          clearSelection={clearSelection}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-[90vh] md:h-full min-h-0">
         {/* Sidebar Navigation - Hidden on mobile */}
-        <div className="hidden md:block md:col-span-3 lg:col-span-3">
-          <ScrollArea className="h-[calc(100vh-12rem)] pr-4">
-            <div className="flex flex-col gap-1">
-              {filteredData.map((category) => {
-                const id = category.category.replace(/\s+/g, "-").toLowerCase();
-                const count = getCategorySelectedCount(category.jobs);
-                const isAllSelected =
-                  category.jobs.length > 0 && count === category.jobs.length;
-
-                return (
-                  <button
-                    key={category.category}
-                    onClick={() => scrollToCategory(id)}
-                    className={cn(
-                      "flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
-                      activeCategory === id
-                        ? "bg-secondary text-secondary-foreground"
-                        : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground",
-                    )}
-                  >
-                    <span className="truncate">{category.category}</span>
-                    {count > 0 && (
-                      <Badge
-                        variant={isAllSelected ? "default" : "secondary"}
-                        className="ml-2 h-5 min-w-5 px-1.5 flex items-center justify-center text-[10px]"
-                      >
-                        {count}
-                      </Badge>
-                    )}
-                  </button>
-                );
-              })}
-              {filteredData.length === 0 && (
-                <div className="px-3 py-2 text-sm text-muted-foreground">
-                  No categories found
-                </div>
-              )}
-            </div>
-          </ScrollArea>
-        </div>
+        <JobSelectorSidebar
+          filteredData={filteredData}
+          getCategorySelectedCount={getCategorySelectedCount}
+          scrollToCategory={scrollToCategory}
+          activeCategory={activeCategory}
+        />
 
         {/* Main Content Area */}
         <div className="col-span-1 md:col-span-9 lg:col-span-9 overflow-y-auto pr-2 scroll-smooth">
