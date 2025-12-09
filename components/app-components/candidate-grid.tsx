@@ -8,6 +8,7 @@ import { Button } from "@/components/app-components/ui/button";
 import Link from "next/link";
 import { usePaginatedPosts } from "@/hooks/usePaginatedPosts";
 import { useAuth } from "@/hooks/useAuth";
+import { SearchX } from "lucide-react";
 
 interface CandidateGridProps {
   searchQuery?: string;
@@ -25,9 +26,8 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
     <div className="space-y-8">
       {searchQuery && (
         <div className="text-sm text-muted-foreground">
-          Found {posts.length} candidate
-          {posts.length !== 1 ? "s" : ""}
-          {searchQuery && ` for "${searchQuery}"`}
+          Found <strong>{posts.length}</strong> candidate
+          {posts.length !== 1 ? "s" : ""} for <strong>"{searchQuery}"</strong>
         </div>
       )}
 
@@ -39,6 +39,9 @@ export function CandidateGrid({ searchQuery = "" }: CandidateGridProps) {
 
       {posts.length === 0 && searchQuery && (
         <div className="text-center py-12">
+          <div className="w-full flex justify-center">
+            <SearchX size={48} />
+          </div>
           <p className="text-muted-foreground">
             No candidates found matching your search.
           </p>

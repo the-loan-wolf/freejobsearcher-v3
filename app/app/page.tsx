@@ -16,12 +16,12 @@ export default function HomePage() {
     <>
       <Header onSearch={handleSearch} />
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+        {!searchQuery && (<div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4 text-balance">Find Your Perfect Candidate</h1>
           <p className="text-lg text-muted-foreground max-w-2xl text-pretty">
             Browse through our curated list of talented professionals ready to join your team.
           </p>
-        </div>
+        </div>)}
         <CandidateGrid searchQuery={searchQuery} />
       </main>
       <Footer />
