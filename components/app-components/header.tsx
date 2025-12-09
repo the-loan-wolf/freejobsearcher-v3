@@ -24,9 +24,41 @@ import { app } from "@/lib/firebaseLib";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "./ui/input-group";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/app-components/ui/navigation-menu"
+import { jobData } from "@/lib/jobCategories";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
+}
+
+function ListItem({
+  title,
+  children,
+  href,
+  ...props
+}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+  return (
+    <li {...props}>
+      <NavigationMenuLink asChild>
+        <Link href={href}>
+          <div className="text-sm leading-none font-medium">{title}</div>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+            {children}
+          </p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  )
 }
 
 export function Header({ onSearch }: HeaderProps) {
@@ -76,26 +108,33 @@ export function Header({ onSearch }: HeaderProps) {
             >
               FreeJobSearcher
             </Link>
-            <nav className="hidden md:flex items-center space-x-6">
-              <a
-                href="#"
-                className="text-foreground/80 hover:text-primary transition-colors duration-300 hover:drop-shadow-sm"
-              >
-                Browse
-              </a>
-              <a
-                href="#"
-                className="text-foreground/80 hover:text-primary transition-colors duration-300 hover:drop-shadow-sm"
-              >
-                Categories
-              </a>
-              <a
-                href="#"
-                className="text-foreground/80 hover:text-primary transition-colors duration-300 hover:drop-shadow-sm"
-              >
-                About
-              </a>
-            </nav>
+            <NavigationMenu className="hidden md:flex">
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent">Categories</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-2 p-4 w-full lg:grid-cols-6 lg:gap-5 md:grid-cols-2 lg:px-20">
+                      {jobData.map((categoryItem, index) => (
+                        <li key={index}>
+                          <strong>{categoryItem.category}</strong>
+                          <ul className="mt-1 gap-5">
+                            {categoryItem.jobs.map((job, jobIndex) => (
+                              <li key={jobIndex} className="text-m text-muted-foreground">{job}</li>
+                            ))}
+                          </ul>
+
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem >
+                  <NavigationMenuTrigger className="bg-transparent">About</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -200,6 +239,50 @@ export function Header({ onSearch }: HeaderProps) {
             </InputGroup>
           </div>
         )}
+        <div className="flex w-full align-baseline">
+          <NavigationMenu className="md:hidden">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent ">Categories</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-2 p-4 w-full lg:grid-cols-6 lg:gap-5 md:grid-cols-2 lg:px-20">
+                    {jobData.map((categoryItem, index) => (
+                      <li key={index}>
+                        <strong>{categoryItem.category}</strong>
+                        <ul className="mt-1 gap-5">
+                          {categoryItem.jobs.map((job, jobIndex) => (
+                            <li key={jobIndex} className="text-m text-muted-foreground">{job}</li>
+                          ))}
+                        </ul>
+
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <ScrollArea
+            className="flex-1 min-w-0 whitespace-nowrap py-2"
+          >
+            <div className="flex w-max space-x-4">
+              {jobData.map((categoryItem, index) => (
+                <span key={index} className="mt-1 gap-5 flex">
+                  {categoryItem.jobs.map((job, jobIndex) => (
+                    <span
+                      key={jobIndex}
+                      className="text-sm text-muted-foreground"
+                    >
+                      {job}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </div>
+
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
       </div>
     </header>
   );
