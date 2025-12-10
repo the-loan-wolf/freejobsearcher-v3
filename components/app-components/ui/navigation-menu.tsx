@@ -106,7 +106,7 @@ function NavigationMenuViewport({
   return (
     <div
       className={cn(
-        'absolute w-full top-full left-0 isolate z-50 flex justify-center max-h-[70vh] overflow-y-auto',
+        'absolute w-full top-full left-0 isolate z-50 flex justify-center max-h-[70vh] overflow-y-auto overscroll-contain',
       )}
     >
       <NavigationMenuPrimitive.Viewport
