@@ -36,6 +36,7 @@ import {
 } from "@/components/app-components/ui/navigation-menu"
 import { jobData } from "@/lib/jobCategories";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { title } from "process";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -51,10 +52,10 @@ function ListItem({
     <li {...props}>
       <NavigationMenuLink asChild>
         <Link href={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
+          <div className="text-sm leading-none">{title}</div>
+          {/* <p className="text-muted-foreground line-clamp-2 text-sm leading-snug"> */}
+          {/*   {children} */}
+          {/* </p> */}
         </Link>
       </NavigationMenuLink>
     </li>
@@ -119,7 +120,7 @@ export function Header({ onSearch }: HeaderProps) {
                           <strong>{categoryItem.category}</strong>
                           <ul className="mt-1 gap-5">
                             {categoryItem.jobs.map((job, jobIndex) => (
-                              <li key={jobIndex} className="text-m text-muted-foreground">{job}</li>
+                              <ListItem key={jobIndex} title={job} href="/" />
                             ))}
                           </ul>
 
@@ -251,7 +252,7 @@ export function Header({ onSearch }: HeaderProps) {
                         <strong>{categoryItem.category}</strong>
                         <ul className="mt-1 gap-5">
                           {categoryItem.jobs.map((job, jobIndex) => (
-                            <li key={jobIndex} className="text-m text-muted-foreground">{job}</li>
+                            <ListItem key={jobIndex} title={job} href="/" />
                           ))}
                         </ul>
 
@@ -273,7 +274,9 @@ export function Header({ onSearch }: HeaderProps) {
                       key={jobIndex}
                       className="text-sm text-muted-foreground"
                     >
-                      {job}
+                      <Link href="/">
+                        {job}
+                      </Link>
                     </span>
                   ))}
                 </span>
