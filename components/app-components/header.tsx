@@ -118,7 +118,7 @@ export function Header({ onSearch }: HeaderProps) {
                           <strong>{categoryItem.category}</strong>
                           <ul className="mt-1 gap-5">
                             {categoryItem.jobs.map((job, jobIndex) => (
-                              <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
+                              <ListItem key={jobIndex} title={job} href={`/app/category/${slugify(job)}`} />
                             ))}
                           </ul>
 
@@ -250,7 +250,7 @@ export function Header({ onSearch }: HeaderProps) {
                         <strong>{categoryItem.category}</strong>
                         <ul className="mt-1 gap-5">
                           {categoryItem.jobs.map((job, jobIndex) => (
-                            <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
+                            <ListItem key={jobIndex} title={job} href={`/app/category/${slugify(job)}`} />
                           ))}
                         </ul>
 
@@ -272,7 +272,7 @@ export function Header({ onSearch }: HeaderProps) {
                       key={jobIndex}
                       className="text-sm text-muted-foreground"
                     >
-                      <Link href={`/category/${slugify(job)}`} >
+                      <Link href={`/app/category/${slugify(job)}`} >
                         {job}
                       </Link>
                     </span>
