@@ -37,6 +37,7 @@ import {
 import { jobData } from "@/lib/jobCategories";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { title } from "process";
+import { slugify } from "@/lib/utils";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -120,7 +121,7 @@ export function Header({ onSearch }: HeaderProps) {
                           <strong>{categoryItem.category}</strong>
                           <ul className="mt-1 gap-5">
                             {categoryItem.jobs.map((job, jobIndex) => (
-                              <ListItem key={jobIndex} title={job} href="/" />
+                              <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
                             ))}
                           </ul>
 
@@ -252,7 +253,7 @@ export function Header({ onSearch }: HeaderProps) {
                         <strong>{categoryItem.category}</strong>
                         <ul className="mt-1 gap-5">
                           {categoryItem.jobs.map((job, jobIndex) => (
-                            <ListItem key={jobIndex} title={job} href="/" />
+                            <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
                           ))}
                         </ul>
 
@@ -274,7 +275,7 @@ export function Header({ onSearch }: HeaderProps) {
                       key={jobIndex}
                       className="text-sm text-muted-foreground"
                     >
-                      <Link href="/">
+                      <Link href={`/category/${slugify(job)}`} >
                         {job}
                       </Link>
                     </span>
