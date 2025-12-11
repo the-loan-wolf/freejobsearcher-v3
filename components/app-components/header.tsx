@@ -3,7 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 
-import { Search, LogOut, Settings, UserCircle, X } from 'lucide-react';
+import { Search, LogOut, Settings, UserCircle } from 'lucide-react';
 import { Button } from "@/components/app-components/ui/button";
 import {
   DropdownMenu,
@@ -27,16 +27,13 @@ import { InputGroup, InputGroupInput, InputGroupAddon } from "./ui/input-group";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/app-components/ui/navigation-menu"
 import { jobData } from "@/lib/jobCategories";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { title } from "process";
 import { slugify } from "@/lib/utils";
 
 interface HeaderProps {
