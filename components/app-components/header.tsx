@@ -230,7 +230,6 @@ export function Header({ onSearch }: HeaderProps) {
               <InputGroupInput
                 onChange={handleSearch}
                 placeholder="Search..."
-                autoFocus
               />
               <InputGroupAddon>
                 <Search />
