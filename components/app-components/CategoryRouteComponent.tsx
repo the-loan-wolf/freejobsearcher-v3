@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Header } from "./header";
 import { CandidateGridCategory } from "./category-candidate-grid";
 import { deslugify } from "@/lib/utils";
+import { Footer } from "./footer";
 
 export function CategoryRouteComponent({ slug }: { slug: string }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,7 @@ export function CategoryRouteComponent({ slug }: { slug: string }) {
           </div>)}
         <CandidateGridCategory searchQuery={searchQuery} category={slug} />
       </main>
+      <Footer />
     </>
   );
 }
