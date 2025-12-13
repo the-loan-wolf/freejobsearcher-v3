@@ -98,7 +98,7 @@ export function Header({ onSearch }: HeaderProps) {
       className={`sticky top-0 z-5 transition-all duration-300 ${isScrolled ? "glass-card" : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 md:py-4 py-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 sm:space-x-8">
             <Link
@@ -225,7 +225,7 @@ export function Header({ onSearch }: HeaderProps) {
         </div>
 
         {isMobileSearchOpen && (
-          <div className="sm:hidden mt-4 mb-2">
+          <div className="sm:hidden py-1">
             <InputGroup className="glass w-full">
               <InputGroupInput
                 onChange={handleSearch}
@@ -261,7 +261,7 @@ export function Header({ onSearch }: HeaderProps) {
             </NavigationMenuList>
           </NavigationMenu>
           <ScrollArea
-            className="flex-1 min-w-0 whitespace-nowrap"
+            className="flex-1 min-w-0 whitespace-nowrap py-1"
           >
             <div className="flex w-max space-x-4">
               {jobData.map((categoryItem, index) => (
