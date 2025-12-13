@@ -238,7 +238,7 @@ export function Header({ onSearch }: HeaderProps) {
             </InputGroup>
           </div>
         )}
-        <div className="flex w-full align-baseline">
+        <div className="flex w-full align-baseline md:mt-2">
           <NavigationMenu className="md:hidden">
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -262,7 +262,7 @@ export function Header({ onSearch }: HeaderProps) {
             </NavigationMenuList>
           </NavigationMenu>
           <ScrollArea
-            className="flex-1 min-w-0 whitespace-nowrap py-2"
+            className="flex-1 min-w-0 whitespace-nowrap"
           >
             <div className="flex w-max space-x-4">
               {jobData.map((categoryItem, index) => (
