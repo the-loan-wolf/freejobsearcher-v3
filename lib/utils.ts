@@ -12,3 +12,7 @@ export const slugify = (str: string) =>
     .replace(/\s+/g, "-")        // spaces → hyphens
     .replace(/[^a-z0-9-]/g, ""); // remove special characters
 
+export const deslugify = (str: string) =>
+  str
+    .replace(/-+/g, " ")        // hyphens → spaces
+    .toUpperCase();

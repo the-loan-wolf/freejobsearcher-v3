@@ -1,3 +1,4 @@
+import { CategoryRouteComponent } from "@/components/app-components/CategoryRouteComponent";
 import { notFound } from "next/navigation";
 
 interface CategoryPageProps {
@@ -9,5 +10,5 @@ interface CategoryPageProps {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   if (!slug) notFound();
-  return <div>{slug}</div>
+  return <CategoryRouteComponent slug={slug} />
 }
