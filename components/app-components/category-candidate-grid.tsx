@@ -8,17 +8,16 @@ import { Button } from "@/components/app-components/ui/button";
 import Link from "next/link";
 import { usePaginatedPosts } from "@/hooks/usePaginatedPosts";
 import { useAuth } from "@/hooks/useAuth";
-import { SearchX } from "lucide-react";
+import { UserX } from "lucide-react";
 import { FilterComponent } from "./FilterComponent";
 
 interface CandidateGridProps {
-  searchQuery?: string;
   category: string;
 }
 
-export function CandidateGridCategory({ searchQuery = "" }: CandidateGridProps) {
+export function CandidateGridCategory({ category }: CandidateGridProps) {
   const { posts, loadMore, loading, isFetchingMore, noMore } =
-    usePaginatedPosts(5, searchQuery);
+    usePaginatedPosts(5, category);
   const { user } = useAuth();
 
   // Conditional render (not early return)
@@ -30,10 +29,10 @@ export function CandidateGridCategory({ searchQuery = "" }: CandidateGridProps) 
         <FilterComponent />
       </aside>
       <div className="space-y-8">
-        {searchQuery && (
+        {category && (
           <div className="text-sm text-muted-foreground">
             Found <strong>{posts.length}</strong> candidate
-            {posts.length !== 1 ? "s" : ""} for <strong>"{searchQuery}"</strong>
+            {posts.length !== 1 ? "s" : ""} for <strong>"{category}"</strong>
           </div>
         )}
 
@@ -43,16 +42,13 @@ export function CandidateGridCategory({ searchQuery = "" }: CandidateGridProps) 
           ))}
         </div>
 
-        {posts.length === 0 && searchQuery && (
+        {posts.length === 0 && category && (
           <div className="text-center py-12">
             <div className="w-full flex justify-center">
-              <SearchX size={48} />
+              <UserX size={48} />
             </div>
             <p className="text-muted-foreground">
-              No candidates found matching your search.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Try adjusting your search terms.
+              No candidates is available in this category now.
             </p>
           </div>
         )}
