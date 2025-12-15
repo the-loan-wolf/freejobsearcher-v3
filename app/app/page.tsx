@@ -12,7 +12,7 @@ export default function HomePage() {
           <p className="text-lg text-muted-foreground max-w-2xl text-pretty">
             Browse through our curated list of talented professionals ready to join your team.
           </p>
-        </div>)
+        </div>
         <CandidateGrid />
       </main>
       <Footer />
