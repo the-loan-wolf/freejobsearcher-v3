@@ -24,7 +24,7 @@ export function CategoryRouteComponent({ slug }: { slug: string }) {
 
   return (
     <>
-      <Header onSearch={handleSearch} />
+      <Header />
       <main className="container mx-auto px-4 py-8">
         {!searchQuery && (
           <div className="mb-8">

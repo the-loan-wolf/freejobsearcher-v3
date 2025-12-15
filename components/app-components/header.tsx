@@ -35,10 +35,7 @@ import {
 import { jobData } from "@/lib/jobCategories";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { slugify } from "@/lib/utils";
-
-interface HeaderProps {
-  onSearch?: (query: string) => void;
-}
+import { useRouter } from "next/navigation";
 
 function ListItem({
   title,
@@ -60,10 +57,11 @@ function ListItem({
   )
 }
 
-export function Header({ onSearch }: HeaderProps) {
+export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(true);
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,12 +72,13 @@ export function Header({ onSearch }: HeaderProps) {
   }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch?.(e.target.value.toLowerCase());
+    // onSearch?.(e.target.value.toLowerCase());
+    router.push(`/app/search?q=${e.target.value.toLowerCase()}`);
   };
 
   const closeSearch = () => {
     setIsMobileSearchOpen(!isMobileSearchOpen);
-    onSearch?.("");
+    // onSearch?.("");
   }
 
   const handleLogout = async () => {
