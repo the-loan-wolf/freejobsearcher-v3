@@ -133,7 +133,7 @@ export function JobSelector({ data }: JobSelectorProps) {
 
   const toggleJob = (job: string) => {
     setSelectedJobs((prev) =>
-      prev.includes(job) ? prev.filter((j) => j !== job) : [...prev, job],
+      prev.includes(job.toLowerCase()) ? prev.filter((j) => j !== job.toLowerCase()) : [...prev, job.toLowerCase()],
     );
   };
 
@@ -237,7 +237,7 @@ export function JobSelector({ data }: JobSelectorProps) {
                     <CardContent>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {category.jobs.map((job) => {
-                          const isSelected = selectedJobs.includes(job);
+                          const isSelected = selectedJobs.includes(job.toLowerCase());
                           return (
                             <div
                               key={job}
