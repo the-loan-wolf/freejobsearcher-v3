@@ -6,18 +6,20 @@ import {
 } from "@/components/app-components/candidate-card";
 import { Button } from "@/components/app-components/ui/button";
 import Link from "next/link";
-import { usePaginatedPosts } from "@/hooks/usePaginatedPosts";
+import { useProfile } from "./useProfile";
 import { useAuth } from "@/hooks/useAuth";
 import { UserX } from "lucide-react";
-import { FilterComponent } from "./FilterComponent";
+import { FilterComponent } from "@/components/app-components/FilterComponent";
 
 interface CandidateGridProps {
   category: string;
 }
 
 export function CandidateGridCategory({ category }: CandidateGridProps) {
-  const { posts, loadMore, loading, isFetchingMore, noMore } =
-    usePaginatedPosts(5, category);
+  const { posts, loadMore, loading, isFetchingMore, noMore } = useProfile(
+    5,
+    category,
+  );
   const { user } = useAuth();
 
   // Conditional render (not early return)

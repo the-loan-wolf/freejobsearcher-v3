@@ -1,5 +1,5 @@
 import { Header } from "./header";
-import { CandidateGridCategory } from "./category-candidate-grid";
+import { CandidateGridCategory } from "@/app/app/category/[slug]/category-candidate-grid";
 import { deslugify } from "@/lib/utils";
 import { Footer } from "./footer";
 import {
@@ -42,7 +42,7 @@ export function CategoryRouteComponent({ slug }: { slug: string }) {
             Browse through our curated list of talented professionals ready to join your team.
           </p>
         </div>
-        <CandidateGridCategory category={slug} />
+        <CandidateGridCategory category={(deslugify(slug)).toLowerCase()} />
       </main>
       <Footer />
     </>
