@@ -1,5 +1,5 @@
 - ~~Add skeleton for client card component on homepage~~
-- ~~skeleton stoped working while loading profile page~~
+- ~~skeleton stopped working while loading profile page~~
 - ~~making authentication routes~~
 - ~~change theme(it's very dark and resource intensive due to the background particles effect)~~
 - ~~add opengraph & twitter card~~
@@ -31,4 +31,7 @@
 - allow users to change the username(name filled on the signup page)
 - implement profile filtering
 - make going to profile/{id} route faster
+- ~~add favorite route where user can see their favorited profiles~~
+- ~~add categories array in the dummy profiles in the db~~
+- change profile pic of dummy accounts, right now they all are looking same
 - ## add resume generation templates

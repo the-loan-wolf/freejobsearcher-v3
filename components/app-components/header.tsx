@@ -3,7 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 
-import { Search, LogOut, Settings, UserCircle } from 'lucide-react';
+import { Search, LogOut, Settings, UserCircle, Star } from 'lucide-react';
 import { Button } from "@/components/app-components/ui/button";
 import {
   DropdownMenu,
@@ -191,6 +191,15 @@ export function Header() {
                     >
                       <UserCircle className="mr-2 h-4 w-4" />
                       <span>View Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/app/favorite"
+                      className="flex items-center"
+                    >
+                      <Star className="mr-2 h-4 w-4" />
+                      <span>View Favorite</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
