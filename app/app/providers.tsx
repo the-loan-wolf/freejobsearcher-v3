@@ -5,6 +5,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { AuthProvider } from "@/app/app/AuthContext";
+import { ThemeProvider } from "next-themes";
 
 export function Providers({
   children,
@@ -14,20 +15,22 @@ export function Providers({
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        {process.env.NODE_ENV === "development" && (
-          <TanStackDevtools
-            plugins={[
-              {
-                name: "TanStack Query",
-                render: <ReactQueryDevtoolsPanel />,
-              },
-            ]}
-          />
-        )}
-      </QueryClientProvider>
-    </AuthProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          {children}
+          {process.env.NODE_ENV === "development" && (
+            <TanStackDevtools
+              plugins={[
+                {
+                  name: "TanStack Query",
+                  render: <ReactQueryDevtoolsPanel />,
+                },
+              ]}
+            />
+          )}
+        </QueryClientProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

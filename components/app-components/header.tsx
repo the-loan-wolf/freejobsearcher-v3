@@ -36,6 +36,7 @@ import { jobData } from "@/lib/jobCategories";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { slugify } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { ThemeSwitcher } from "./theme-switcher";
 
 function ListItem({
   title,
@@ -157,6 +158,7 @@ export function Header() {
             {/*     <Search className="h-5 w-5" /> */}
             {/*   )} */}
             {/* </button> */}
+            <ThemeSwitcher />
 
             {user ? (
               <DropdownMenu>
