@@ -91,10 +91,10 @@ export default function ProfileClientUI({
                   </span>
                 </div>
                 <div className="space-y-3">
-                  <Button className="w-full">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Contact Candidate
-                  </Button>
+                  {/* <Button className="w-full"> */}
+                  {/*   <Mail className="h-4 w-4 mr-2" /> */}
+                  {/*   Contact Candidate */}
+                  {/* </Button> */}
                   <Favorite
                     uid={candidate.id}
                     isFavorited={initialIsFavorited}
