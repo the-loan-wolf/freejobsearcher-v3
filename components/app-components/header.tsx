@@ -3,7 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 
-import { Search, LogOut, Settings, UserCircle, Star } from 'lucide-react';
+import { Search, LogOut, Settings, UserCircle, Star, FilePen } from 'lucide-react';
 import { Button } from "@/components/app-components/ui/button";
 import {
   DropdownMenu,
@@ -202,6 +202,15 @@ export function Header() {
                     >
                       <Star className="mr-2 h-4 w-4" />
                       <span>View Favorite</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/app/account/profile/edit"
+                      className="flex items-center"
+                    >
+                      <FilePen className="mr-2 h-4 w-4" />
+                      <span>Edit your resume</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
