@@ -88,7 +88,7 @@ export default function ProfileView({
               ))}
               <div className="flex items-center text-sm">
                 <MapPin className="h-4 w-4 text-muted-foreground mr-3" />
-                <span className="text-foreground">{user.profile.location}</span>
+                <span className="text-foreground">{user.profile.address}</span>
               </div>
               {user.createdAt && (
                 <div className="flex items-center text-sm">

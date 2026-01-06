@@ -90,7 +90,7 @@ export function CandidateCard({ candidate }: { candidate: Profile }) {
 
             <div className="flex items-center justify-center text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300">
               <MapPin className="h-4 w-4 mr-1" />
-              {candidate.location}
+              {candidate.address}
             </div>
 
             <div className="flex items-center justify-center text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300">

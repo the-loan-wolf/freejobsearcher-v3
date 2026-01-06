@@ -73,7 +73,7 @@ export default function ProfileClientUI({
                 </p>
                 <div className="flex items-center justify-center text-muted-foreground">
                   <MapPin className="h-4 w-4 mr-1" />
-                  {candidate.profile.location}
+                  {candidate.profile.address}
                 </div>
                 <div className="flex items-center justify-center text-muted-foreground">
                   <Clock className="h-4 w-4 mr-1" />

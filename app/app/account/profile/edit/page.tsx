@@ -59,7 +59,7 @@ export default function UserProfilePage() {
     profile: {
       name: "",
       role: "",
-      location: "",
+      address: "",
       salary: "",
       image: "",
       experience: "",

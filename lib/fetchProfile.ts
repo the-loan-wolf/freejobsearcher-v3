@@ -19,7 +19,7 @@ export interface Profile {
   id: string;
   name: string;
   role: string;
-  location: string;
+  address: string;
   salary: string;
   image: string;
   experience: string;

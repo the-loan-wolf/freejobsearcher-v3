@@ -217,7 +217,7 @@ export default function ProfilePicUpload({ setParentUrlState }: { setParentUrlSt
               profile: {
                 name: "",
                 role: "",
-                location: "",
+                address: "",
                 salary: "",
                 image: response.url,
                 experience: "",

@@ -357,15 +357,15 @@ export default function ProfileEdit({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="location">
-                      Location<span className="text-red-500">*</span>
+                    <Label htmlFor="address">
+                      Current Address<span className="text-red-500">*</span>
                     </Label>
                     <Input
-                      id="location"
+                      id="address"
                       required
-                      value={form.profile.location}
+                      value={form.profile.address}
                       onChange={(e) =>
-                        updateProfile("location", e.target.value.toLowerCase())
+                        updateProfile("address", e.target.value.toLowerCase())
                       }
                     />
                   </div>
