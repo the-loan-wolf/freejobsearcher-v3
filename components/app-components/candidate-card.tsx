@@ -9,7 +9,7 @@ import {
 } from "@/components/app-components/ui/avatar";
 import Link from "next/link";
 import Favorite from "./favorite";
-import { Profile } from "@/lib/fetchProfile";
+import { Profile } from "@/lib/types";
 
 export function CandidateGridSkeleton() {
   return (

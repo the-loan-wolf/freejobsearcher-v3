@@ -1,4 +1,4 @@
-import { Profile } from "./fetchProfile";
+import { Profile } from "./types";
 
 // Type for a single favorite item
 interface Favorite {

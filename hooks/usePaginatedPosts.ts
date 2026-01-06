@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchProfile, Profile } from "../lib/fetchProfile";
+import { fetchProfile } from "../lib/fetchProfile";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
@@ -9,6 +9,7 @@ import mapProfilesToFavorites, {
 } from "@/lib/mapProfilesToFavorites";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { Profile } from "@/lib/types";
 
 const db = getFirestore(app);
 

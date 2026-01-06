@@ -32,3 +32,10 @@ export type ResumeType = {
   isFavorited: boolean;
   categories: string[];
 };
+
+export type Profile = ResumeType["profile"] & {
+  id: string;
+  skills: string[];
+  createdAt: Timestamp;
+  isFavorited: boolean;
+};

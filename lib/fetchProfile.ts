@@ -6,22 +6,14 @@ import {
   startAfter,
   getDocs,
   getFirestore,
-  Timestamp,
   QueryDocumentSnapshot,
   endAt,
   startAt,
 } from "firebase/firestore";
 import { app } from "./firebaseLib";
-import { ResumeType } from "@/lib/types";
+import { Profile } from "./types";
 
 const db = getFirestore(app);
-
-export type Profile = ResumeType["profile"] & {
-  id: string;
-  skills: string[];
-  createdAt: Timestamp;
-  isFavorited: boolean;
-};
 
 export const fetchProfile = async (
   pageSize: number,
