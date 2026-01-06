@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { uploadImageAction } from "@/app/app/action";
 import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { dummyData } from "@/lib/dummyData";
+import { profile } from "console";
 
 const storage = getStorage(app);
 const auth = getAuth();
@@ -213,22 +215,7 @@ export default function ProfilePicUpload({ setParentUrlState }: { setParentUrlSt
             await updateDoc(docRef, { "profile.image": response.url });
           } else {
             // Document does not exist, so we create it
-            await setDoc(docRef, {
-              profile: {
-                name: "",
-                role: "",
-                address: "",
-                salary: "",
-                image: response.url,
-                experience: "",
-                bio: "",
-              },
-              contact: { phones: [""], emails: [""] },
-              education: [{ degree: "", institution: "", year: "" }],
-              workHistory: [{ company: "", position: "", duration: "" }],
-              achievements: [""],
-              skills: [""],
-            }, { merge: true });
+            await setDoc(docRef, { ...dummyData, profile: { ...dummyData.profile, image: response.url } }, { merge: true });
           }
 
           // update the parent state

@@ -13,6 +13,7 @@ import {
 } from "@/components/app-components/ui/alert";
 import Link from "next/link";
 import ProfileEditSkeleton from "@/components/app-components/profileEditSkeleton";
+import { dummyData } from "@/lib/dummyData";
 
 export default function UserProfilePage() {
   const { user, loading: isAuthLoading } = useAuth();
@@ -54,29 +55,6 @@ export default function UserProfilePage() {
     return <ProfileEditSkeleton />;
   }
 
-  // State 4: Auth is done, user exists, but profile fetch failed
-  let emptyForm = {
-    profile: {
-      name: "",
-      role: "",
-      address: "",
-      salary: "",
-      image: "",
-      experience: "",
-      bio: "",
-    },
-    contact: { phones: [""], emails: [""] },
-    education: [{ degree: "", institution: "", year: "" }],
-    workHistory: [{ company: "", position: "", duration: "" }],
-    achievements: [""],
-    skills: [""],
-    createdAt: null,
-    ytVid: "",
-    id: "",
-    isFavorited: false,
-    categories: [""]
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -99,7 +77,7 @@ export default function UserProfilePage() {
             </Alert>
           )}
 
-          <ProfileEdit initialData={form || emptyForm} user={user} />
+          <ProfileEdit initialData={form || dummyData} user={user} />
         </div>
       </div>
     </div>

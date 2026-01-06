@@ -13,6 +13,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/app-components/ui/alert";
+import { dummyData } from "@/lib/dummyData";
 
 export default function UserProfilePage() {
   const { user, loading: isAuthLoading } = useAuth();
@@ -54,29 +55,6 @@ export default function UserProfilePage() {
     return <ProfileSkeleton />;
   }
 
-  // State 4: Auth is done, user exists, but profile fetch failed
-  let emptyForm = {
-    profile: {
-      name: "",
-      role: "",
-      address: "",
-      salary: "",
-      image: "",
-      experience: "",
-      bio: "",
-    },
-    contact: { phones: [""], emails: [""] },
-    education: [{ degree: "", institution: "", year: "" }],
-    workHistory: [{ company: "", position: "", duration: "" }],
-    achievements: [""],
-    skills: [""],
-    createdAt: null,
-    ytVid: "",
-    id: "",
-    isFavorited: false,
-    categories: [""]
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -99,7 +77,7 @@ export default function UserProfilePage() {
             </Alert>
           )}
 
-          <ProfileView user={form || emptyForm} />
+          <ProfileView user={form || dummyData} />
         </div>
       </div>
     </div>
