@@ -11,22 +11,16 @@ import {
   where,
 } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
+import { ResumeType } from "@/lib/types";
 
 const db = getFirestore(app);
 
-export interface Profile {
+export type Profile = ResumeType["profile"] & {
   id: string;
-  name: string;
-  role: string;
-  address: string;
-  salary: string;
-  image: string;
-  experience: string;
-  bio: string;
   skills: string[];
   createdAt: Timestamp;
   isFavorited: boolean;
-}
+};
 
 export const fetchProfile = async (
   pageSize: number,
