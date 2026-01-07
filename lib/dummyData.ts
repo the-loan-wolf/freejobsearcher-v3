@@ -17,6 +17,7 @@ export const dummyData = {
   ytVid: "",
   id: "",
   isFavorited: false,
-  categories: [""]
+  categories: [""],
+  relocate: false
 }
 

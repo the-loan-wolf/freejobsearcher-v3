@@ -31,6 +31,7 @@ export type ResumeType = {
   id: string;
   isFavorited: boolean;
   categories: string[];
+  relocate: boolean;
 };
 
 export type Profile = ResumeType["profile"] & {

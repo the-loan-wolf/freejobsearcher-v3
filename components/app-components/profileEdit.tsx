@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/app-components/ui/input";
 import { Label } from "@/components/app-components/ui/label";
 import { Textarea } from "@/components/app-components/ui/textarea";
+import { Checkbox } from "@/components/app-components/ui/checkbox"
 import { FormEvent, useState } from "react";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
 import { app } from "@/lib/firebaseLib";
@@ -198,6 +199,10 @@ export default function ProfileEdit({
     setForm((prev) => ({ ...prev, ytVid: vid }));
   };
 
+  const handleRelocateChange = (checked: boolean | "indeterminate") => {
+    setForm((prev) => ({ ...prev, relocate: checked === true }))
+  }
+
   /* --- MUTATION LOGIC --- */
 
   // 5. Define the async function that does the saving
@@ -368,6 +373,13 @@ export default function ProfileEdit({
                         updateProfile("address", e.target.value.toLowerCase())
                       }
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <Checkbox id="relocate" checked={form.relocate} onCheckedChange={handleRelocateChange} />
+                      <Label htmlFor="relocate">Are you willing to relocate for the job?</Label>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
