@@ -166,7 +166,7 @@ export function Header() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex items-center space-x-0 sm:space-x-2 bg-primary/10 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+                    className="flex group items-center space-x-0 sm:space-x-2 bg-primary/10 border-primary/20 hover:border-primary/40 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                   >
                     <Avatar className="h-6 w-6 ring-2 ring-primary/20">
                       <AvatarImage

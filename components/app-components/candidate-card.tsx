@@ -81,10 +81,25 @@ export function CandidateCard({ candidate }: { candidate: Profile }) {
           </Avatar>
 
           <div className="space-y-2">
-            <h3 className="font-bold text-lg text-foreground group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
-              {candidate.name}
+            <h3 className="relative font-bold text-lg text-foreground">
+              <span className="transition-opacity duration-300 group-hover:opacity-0">
+                {candidate.name}
+              </span>
+
+              <span
+                className="
+                  absolute inset-0
+                  bg-gradient-to-r from-primary to-accent
+                  bg-clip-text text-transparent
+                  opacity-0
+                  transition-opacity duration-300
+                  group-hover:opacity-100
+                "
+              >
+                {candidate.name}
+              </span>
             </h3>
-            <p className="text-primary font-medium group-hover:text-accent transition-colors duration-300">
+            <p className="text-primary font-medium">
               {candidate.role}
             </p>
 
@@ -104,7 +119,7 @@ export function CandidateCard({ candidate }: { candidate: Profile }) {
               <Badge
                 key={skill}
                 variant="secondary"
-                className="text-xs border-primary/10 group-hover:border-primary/20 group-hover:bg-primary/90"
+                className="text-xs border-primary/10"
               >
                 {skill}
               </Badge>
@@ -116,7 +131,7 @@ export function CandidateCard({ candidate }: { candidate: Profile }) {
               <span className="text-sm text-muted-foreground">
                 Expected Salary
               </span>
-              <span className="font-bold text-lg text-primary group-hover:text-accent group-hover:drop-shadow-sm transition-all duration-300">
+              <span className="font-bold text-lg text-primary">
                 ₹{candidate.salary}
               </span>
             </div>
