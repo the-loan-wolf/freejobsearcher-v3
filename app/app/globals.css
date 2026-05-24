@@ -139,8 +139,8 @@
   }
   .glass-card {
     backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: color-mix(in oklab, var(--background) 70%, transparent);
+    border: 1px solid color-mix(in oklab, var(--foreground) 15%, transparent);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
 }
