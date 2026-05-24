@@ -95,7 +95,7 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-5 transition-all duration-300 ${isScrolled ? "glass-card" : "bg-transparent"
+      className={`sticky top-0 z-5 transition-all duration-300 ${isScrolled ? "glass-card !border-x-0 !border-t-0" : "bg-transparent"
         }`}
     >
       <div className="container mx-auto px-4 md:py-4 py-1">
