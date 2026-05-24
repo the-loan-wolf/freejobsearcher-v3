@@ -85,7 +85,7 @@ export function Footer() {
 
         <div className="border-t border-border mt-12 pt-8 text-center text-muted-foreground">
           <p>
-            &copy; 2025 FreeJobSearcher. All rights reserved. Built with ❤️ for
+            &copy; {new Date().getFullYear()} FreeJobSearcher. All rights reserved. Built with ❤️ for
             job seekers everywhere.
           </p>
         </div>
