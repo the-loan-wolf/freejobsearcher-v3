@@ -72,7 +72,7 @@ export function CandidateGridCategory({ category }: CandidateGridProps) {
         ) : (
           <div className="flex justify-center">
             <Button asChild>
-              <Link href={"/app/signin"}>Sign In to see more</Link>
+              <Link href={"/signin"}>Sign In to see more</Link>
             </Button>
           </div>
         )}

@@ -15,7 +15,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { uploadImageAction } from "@/app/app/action";
+import { uploadImageAction } from "@/app/action";
 import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import { dummyData } from "@/lib/dummyData";
 import { profile } from "console";

@@ -45,7 +45,7 @@ export default function SettingsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
-            href="/app"
+            href="/"
             className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />

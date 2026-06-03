@@ -28,7 +28,7 @@ export default function SignInPage() {
       await signInWithEmailAndPassword(auth, email, password)
       toast.success("Logged In Successful!")
       setIsLoading(false)
-      setTimeout(() => router.push('/app'), 500);
+      setTimeout(() => router.push('/'), 500);
     } catch (error) {
       console.log(error);
       toast.error("Not able to sign in");
@@ -90,7 +90,7 @@ export default function SignInPage() {
 
             <div className="flex justify-end">
               <Link
-                href="/app/recover-password"
+                href="/recover-password"
                 className="text-sm text-primary hover:text-primary/80 transition-colors"
               >
                 Forgot password?
@@ -117,7 +117,7 @@ export default function SignInPage() {
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <Link
-              href="/app/signup"
+              href="/signup"
               className="text-primary hover:text-primary/80 transition-colors font-medium"
             >
               Sign up

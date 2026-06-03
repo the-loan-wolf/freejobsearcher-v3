@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { useState } from "react";
-import { AuthProvider } from "@/app/app/AuthContext";
+import { AuthProvider } from "@/app/AuthContext";
 import { ThemeProvider } from "next-themes";
 
 export function Providers({

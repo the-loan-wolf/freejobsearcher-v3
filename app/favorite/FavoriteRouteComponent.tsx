@@ -21,7 +21,7 @@ export function FavoriteRouteComponent() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/app">Home</Link>
+                  <Link href="/">Home</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />

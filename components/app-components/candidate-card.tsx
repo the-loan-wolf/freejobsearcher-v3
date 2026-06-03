@@ -143,7 +143,7 @@ export function CandidateCard({ candidate }: { candidate: Profile }) {
                 asChild
               >
                 <Link
-                  href={`/app/profile/${candidate.id}`}
+                  href={`/profile/${candidate.id}`}
                   // target="_blank"
                   className="w-[85%]"
                 >

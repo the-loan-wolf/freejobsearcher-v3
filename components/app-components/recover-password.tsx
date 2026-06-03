@@ -80,7 +80,7 @@ export default function RecoverPasswordPage() {
               {/* Back to sign in */}
               <div className="mt-6 text-center">
                 <Link
-                  href="/app/signin"
+                  href="/signin"
                   className="text-sm text-primary hover:text-primary/80 transition-colors"
                 >
                   Back to sign in
@@ -129,7 +129,7 @@ export default function RecoverPasswordPage() {
                   Try another email
                 </Button>
 
-                <Link href="/app/signin" className="block">
+                <Link href="/signin" className="block">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                     Back to sign in
                   </Button>

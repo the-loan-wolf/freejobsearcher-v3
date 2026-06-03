@@ -1,5 +1,5 @@
 import { Header } from "./header";
-import { CandidateGridCategory } from "@/app/app/category/[slug]/category-candidate-grid";
+import { CandidateGridCategory } from "@/app/category/[slug]/category-candidate-grid";
 import { deslugify } from "@/lib/utils";
 import { Footer } from "./footer";
 import {
@@ -22,13 +22,13 @@ export function CategoryRouteComponent({ slug }: { slug: string }) {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/app">Home</Link>
+                  <Link href="/">Home</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/app/category">category</Link>
+                  <span>category</span>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />

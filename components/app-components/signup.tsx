@@ -51,7 +51,7 @@ export default function SignUpPage() {
       await sendEmailVerification(userCredential.user);
       toast.success("Email Verification sent!");
       setIsLoading(false);
-      setTimeout(() => router.push('/app'), 500);
+      setTimeout(() => router.push('/'), 500);
 
     } catch (error) {
       toast.error("Sign Up Failed")
@@ -177,7 +177,7 @@ export default function SignUpPage() {
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
-              href="/app/signin"
+              href="/signin"
               className="text-primary hover:text-primary/80 transition-colors font-medium"
             >
               Sign in

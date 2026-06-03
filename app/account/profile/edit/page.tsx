@@ -1,18 +1,18 @@
 "use client";
 
 import { AlertCircleIcon, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import ProfileView from "@/components/app-components/profileView";
+import ProfileEdit from "@/components/app-components/profileEdit";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import fetchCandidate from "@/lib/fetchCandidate";
-import ProfileSkeleton from "@/components/app-components/profileSkeleton";
 import { Spinner } from "@/components/app-components/ui/spinner";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from "@/components/app-components/ui/alert";
+import Link from "next/link";
+import ProfileEditSkeleton from "@/components/app-components/profileEditSkeleton";
 import { dummyData } from "@/lib/dummyData";
 
 export default function UserProfilePage() {
@@ -52,7 +52,7 @@ export default function UserProfilePage() {
   // State 3: Auth is done, user exists, but profile is loading
   // (This is the *only* time to show the skeleton)
   if (isProfileLoading) {
-    return <ProfileSkeleton />;
+    return <ProfileEditSkeleton />;
   }
 
   return (
@@ -60,11 +60,11 @@ export default function UserProfilePage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
-            href="/app"
+            href="/account/profile"
             className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            Back to Profile
           </Link>
 
           {isError && (
@@ -77,7 +77,7 @@ export default function UserProfilePage() {
             </Alert>
           )}
 
-          <ProfileView user={form || dummyData} />
+          <ProfileEdit initialData={form || dummyData} user={user} />
         </div>
       </div>
     </div>

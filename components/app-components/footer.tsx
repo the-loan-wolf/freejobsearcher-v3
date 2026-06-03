@@ -22,17 +22,17 @@ export function Footer() {
             <h4 className="font-semibold text-foreground">For Candidates</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/app" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
                   Browse Jobs
                 </a>
               </li>
               <li>
-                <a href="/app/signup" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/signup" className="text-muted-foreground hover:text-primary transition-colors">
                   Create Profile
                 </a>
               </li>
               <li>
-                <a href="/app/account/profile/edit" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/account/profile/edit" className="text-muted-foreground hover:text-primary transition-colors">
                   Upload Resume
                 </a>
               </li>

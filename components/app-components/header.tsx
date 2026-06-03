@@ -74,7 +74,7 @@ export function Header() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     // onSearch?.(e.target.value.toLowerCase());
-    router.push(`/app/search?q=${e.target.value.toLowerCase()}`);
+    router.push(`/search?q=${e.target.value.toLowerCase()}`);
   };
 
   const closeSearch = () => {
@@ -102,7 +102,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 sm:space-x-8">
             <Link
-              href="/app"
+              href="/"
               className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-300"
             >
               FreeJobSearcher
@@ -118,7 +118,7 @@ export function Header() {
                           <strong>{categoryItem.category}</strong>
                           <ul className="mt-1 gap-5">
                             {categoryItem.jobs.map((job, jobIndex) => (
-                              <ListItem key={jobIndex} title={job} href={`/app/category/${slugify(job)}`} />
+                              <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
                             ))}
                           </ul>
 
@@ -188,7 +188,7 @@ export function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/app/account/profile"
+                      href="/account/profile"
                       className="flex items-center"
                     >
                       <UserCircle className="mr-2 h-4 w-4" />
@@ -197,7 +197,7 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/app/favorite"
+                      href="/favorite"
                       className="flex items-center"
                     >
                       <Star className="mr-2 h-4 w-4" />
@@ -206,7 +206,7 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/app/account/profile/edit"
+                      href="/account/profile/edit"
                       className="flex items-center"
                     >
                       <FilePen className="mr-2 h-4 w-4" />
@@ -215,7 +215,7 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/app/account/settings"
+                      href="/account/settings"
                       className="flex items-center"
                     >
                       <Settings className="mr-2 h-4 w-4" />
@@ -234,7 +234,7 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <Button asChild>
-                <Link href="/app/signin">
+                <Link href="/signin">
                   <UserCircle className="h-4 w-4" />
                   Sign In
                 </Link>
@@ -268,7 +268,7 @@ export function Header() {
                         <strong>{categoryItem.category}</strong>
                         <ul className="mt-1 gap-5">
                           {categoryItem.jobs.map((job, jobIndex) => (
-                            <ListItem key={jobIndex} title={job} href={`/app/category/${slugify(job)}`} />
+                            <ListItem key={jobIndex} title={job} href={`/category/${slugify(job)}`} />
                           ))}
                         </ul>
 
@@ -290,7 +290,7 @@ export function Header() {
                       key={jobIndex}
                       className="text-sm text-muted-foreground"
                     >
-                      <Link href={`/app/category/${slugify(job)}`} >
+                      <Link href={`/category/${slugify(job)}`} >
                         {job}
                       </Link>
                     </span>
